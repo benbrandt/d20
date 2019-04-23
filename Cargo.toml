@@ -11,6 +11,7 @@ log = "*"
 rand = "*"
 regex = "*"
 sentry = "*"
+sentry-actix = "*"
 serde = { version = "*", features = ["derive"] }
 serde_derive = "*"
 serde_json = "*"

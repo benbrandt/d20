@@ -10,11 +10,14 @@ struct RollQuery {
     roll: String,
 }
 
-// this handler get called only if the request's query contains `username` field
 fn index(query: Query<RollQuery>) -> impl Responder {
     match dice_roller::roll(&query.roll) {
-        Ok(r) => HttpResponse::Ok().json(r),
-        Err(m) => HttpResponse::BadRequest().json(m),
+        Ok(r) => HttpResponse::Ok()
+            .content_encoding(http::ContentEncoding::Auto)
+            .json(r),
+        Err(m) => HttpResponse::BadRequest()
+            .content_encoding(http::ContentEncoding::Auto)
+            .json(m),
     }
 }
 

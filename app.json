@@ -1,0 +1,11 @@
+{
+  "name": "d20",
+  "description": "A backend for tools helpful for running a Dungeons and Dragons campaign",
+  "repository": "https://github.com/benbrandt/d20",
+  "success_url": "/",
+  "keywords": ["rust", "actix"],
+  "website": "https://github.com/benbrandt/d20",
+  "env": {
+    "BUILDPACK_URL": "https://github.com/emk/heroku-buildpack-rust.git"
+  }
+}

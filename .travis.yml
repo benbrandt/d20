@@ -1,0 +1,67 @@
+# for more information on configuring a rust travis build
+# see https://docs.travis-ci.com/user/languages/rust/
+language: rust
+
+rust:
+  - stable
+  # for code coverage only
+  - nightly
+
+matrix:
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
+
+# only build pushes to master
+# prs are build separately
+# https://docs.travis-ci.com/user/pull-requests/#how-pull-requests-are-built
+branches:
+  only:
+    - master
+
+# Cache `cargo install`ed tools, but don't cache the project's `target`
+# directory (which ends up over-caching and filling all disk space!)
+# https://levans.fr/rust_travis_cache.html
+cache:
+  directories:
+    - $HOME/.cargo
+    - $HOME/.npm
+    - $TRAVIS_BUILD_DIR/target
+
+addons:
+  apt:
+    packages:
+      # required by tarpaulin code coverage tool
+      - libssl-dev
+      - jq
+
+before_install:
+  - rustup component add clippy
+
+install: |
+  # https://github.com/xd009642/tarpaulin/issues/150
+  if [[ "$TRAVIS_RUST_VERSION" == nightly ]]; then
+    cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+  fi
+
+script:
+  # fail fast if build fails
+  - cargo check
+  - cargo clippy --all-targets --all-features -- -D warnings
+  # test changes to behavior
+  - cargo test
+
+# report coverage to coveralls (on nightly)
+# see https://github.com/xd009642/tarpaulin for more information
+after_success: |
+  if [[ "$TRAVIS_RUST_VERSION" == nightly ]]; then
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+
+    # Uncomment the following two lines create and upload a report for codecov.io
+    cargo tarpaulin --out Xml
+    bash <(curl -s https://codecov.io/bash)
+  fi
+
+notifications:
+  email:
+    on_success: always

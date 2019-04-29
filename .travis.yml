@@ -34,15 +34,6 @@ after_success: |
     cargo tarpaulin --out Xml
     bash <(curl -s https://codecov.io/bash)
   fi
-deploy:
-  provider: heroku
-  api_key:
-    secure: ZGI2Wp4GvVsAHFMKkx3ObOuMyjcL/O5tncKgmeaAmlxpJMkmrkY5ekLex7JuZKJv4ZOqLyUa21ap8ayCUFoCrcpfdVTF4TMTpe83NgHT5lqNl1Jzvt/YRBPhuk3X7pe7OL6cZxtIi4SFxm8n+O8kXurvVulc8xe+cKsyphTdO1yhrpvqv7aRoslHN6ifYK+qr4eP60Q6lmdRWs43dZXJt68lI3MuSjk9G84EFFSkiCv1PXQC91F5R3y0HPtNMzCqfzqy6ady1BFJpsX5FJA7yXzrpTijPvr+7nS8tb08vx8KRTQYXckD5MefpVZW2mOJTOw7lZUGiOc6AE/Vj8gxv538NhWfzPDjYs4BXBBolH4FeP7vX7PH6j1OWpszAAIKnWSkphyM1Pe8lABZ/gSd+OZhIfPoSJS92QNssIMcHRE1R+qnj5oB9gW4BRNrzPkZX7msmMj04P46tl5GEJGgVBiAVZy+mcG32T4qk+xiQ/s7M8wHM+852+08e6HZugrf4jOyqaiJKYNUQq2ooMZmm0vyhFu2aCkhgrfufjCknGcs91o7XTpvUDzVglLqtfujNgI05LXBW6a7xGcMYSKI9RlpBVCPR+3s4K2r0nYGOk9g3/aFByrrVLPYjFMw5zxpXZN0zcc5L1AG3ju1wyQm3py7l/TOf9jO3a5sYs2igEY=
-  app: morning-eyrie-18336
-  skip_cleanup: true
-  on:
-    branch: master
-    condition: "$TRAVIS_RUST_VERSION = stable"
 notifications:
   email:
     on_success: always

@@ -4,6 +4,7 @@ use sentry;
 use sentry_actix::SentryMiddleware;
 use serde::Deserialize;
 use std::env;
+use url::percent_encoding::percent_decode;
 
 mod dice_roller;
 
@@ -13,7 +14,11 @@ struct RollQuery {
 }
 
 fn index(query: Query<RollQuery>) -> impl Responder {
-    match dice_roller::roll(&query.roll) {
+    match dice_roller::roll(
+        &percent_decode(query.roll.as_bytes())
+            .decode_utf8()
+            .unwrap_or_default(),
+    ) {
         Ok(r) => HttpResponse::Ok()
             .content_encoding(http::ContentEncoding::Auto)
             .json(r),

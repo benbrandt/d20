@@ -24,6 +24,7 @@ install: |
   fi
 script:
   - cargo build
+  - cargo fmt -- --check
   - cargo clippy --all-targets --all-features -- -D warnings
   - cargo test
 after_success: |

@@ -17,6 +17,7 @@ addons:
       - jq
 before_install:
   - rustup component add clippy
+  - rustup component add rustfmt
 install: |
   # https://github.com/xd009642/tarpaulin/issues/150
   if [[ "$TRAVIS_RUST_VERSION" == nightly ]]; then

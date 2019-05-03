@@ -1,30 +1,16 @@
 use actix_web::middleware::cors::Cors;
-use actix_web::{http, server, App, HttpResponse, Query, Responder};
+use actix_web::{http, server, App, HttpResponse, Json, Responder};
 use sentry;
 use sentry_actix::SentryMiddleware;
-use serde::Deserialize;
 use std::env;
-use url::percent_encoding::percent_decode;
 
 mod dice_roller;
+use dice_roller::RollInstruction;
 
-#[derive(Deserialize)]
-struct RollQuery {
-    roll: String,
-}
-
-fn index(query: Query<RollQuery>) -> impl Responder {
-    match dice_roller::roll(
-        &percent_decode(query.roll.as_bytes())
-            .decode_utf8()
-            .unwrap_or_default(),
-    ) {
-        Ok(r) => HttpResponse::Ok()
-            .content_encoding(http::ContentEncoding::Auto)
-            .json(r),
-        Err(m) => HttpResponse::BadRequest()
-            .content_encoding(http::ContentEncoding::Auto)
-            .json(m),
+fn roll(info: Json<RollInstruction>) -> impl Responder {
+    match dice_roller::roll(info.into_inner()) {
+        Ok(r) => HttpResponse::Ok().json(r),
+        Err(m) => HttpResponse::BadRequest().json(m),
     }
 }
 
@@ -45,7 +31,7 @@ fn main() {
         App::new()
             .configure(|app| {
                 Cors::for_app(app)
-                    .resource("/", |r| r.method(http::Method::GET).with(index))
+                    .resource("/roll/", |r| r.method(http::Method::POST).with(roll))
                     .register()
             })
             .middleware(SentryMiddleware::new())

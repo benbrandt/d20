@@ -146,5 +146,5 @@ mod tests {
             modifier: 0,
         })
         .unwrap();
-        }
+    }
 }

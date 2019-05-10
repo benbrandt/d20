@@ -1,13 +1,13 @@
 use log::info;
 use rand::{rngs::ThreadRng, Rng};
 use regex::Regex;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, PartialEq)]
-struct RollInstructions {
-    num: i32,
-    dice: i32,
-    modifier: i32,
+#[derive(Debug, Deserialize, PartialEq, Serialize)]
+pub struct RollInstruction {
+    pub num: i32,
+    pub die: i32,
+    pub modifier: i32,
 }
 
 #[derive(Serialize, Debug)]
@@ -17,32 +17,33 @@ pub struct RollError {
 
 #[derive(Serialize, Debug)]
 pub struct DiceResult {
-    pub dice: i32,
+    pub die: i32,
     pub value: i32,
 }
 
 #[derive(Serialize, Debug)]
 pub struct RollResult {
-    pub instruction: String,
+    pub instruction: RollInstruction,
     pub rolls: Vec<DiceResult>,
     pub total: i32,
 }
 
-fn parse_roll(cmd: &str) -> Result<Vec<RollInstructions>, RollError> {
+pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
     let re = Regex::new(r"(?P<num>\d+)d(?P<dice>\d+)(\s*\+\s*(?P<modifier>\d+))?").unwrap();
     if re.is_match(cmd) {
-        let rolls: Vec<RollInstructions> = re
+        Ok(re
             .captures_iter(cmd)
-            .map(|cap| RollInstructions {
+            .map(|cap| RollInstruction {
                 num: cap["num"].parse().unwrap(),
-                dice: cap["dice"].parse().unwrap(),
+                die: cap["dice"].parse().unwrap(),
                 modifier: match cap.name("modifier") {
                     Some(m) => m.as_str().parse().unwrap(),
                     None => 0,
                 },
             })
-            .collect();
-        Ok(rolls)
+            .take(1)
+            .next()
+            .unwrap())
     } else {
         Err(RollError {
             message: String::from("Invalid format. Try again with something like 1d20 or 3d6."),
@@ -50,38 +51,36 @@ fn parse_roll(cmd: &str) -> Result<Vec<RollInstructions>, RollError> {
     }
 }
 
-fn gen_roll(rng: &mut ThreadRng, dice: i32) -> DiceResult {
-    let roll = rng.gen_range(1, dice + 1);
-    info!("Dice: {}, Roll: {}", dice, roll);
-    DiceResult { dice, value: roll }
+fn gen_roll(rng: &mut ThreadRng, die: i32) -> DiceResult {
+    let roll = rng.gen_range(1, die + 1);
+    info!("Die: {}, Roll: {}", die, roll);
+    DiceResult { die, value: roll }
 }
 
-pub fn roll(cmd: &str) -> Result<RollResult, RollError> {
+pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
     let mut rng = rand::thread_rng();
-    let roll_instructions = parse_roll(cmd)?;
     let mut total = 0;
     let mut rolls = Vec::new();
-    for instruction in roll_instructions {
-        if instruction.num < 1 {
-            return Err(RollError {
-                message: String::from("You have to roll something!"),
-            });
-        } else if instruction.num > 99 {
-            return Err(RollError {
-                message: String::from(
-                    "Are you a god in this game?! Roll a more reasonable number of dice!",
-                ),
-            });
-        }
-        for _ in 0..instruction.num {
-            let roll = gen_roll(&mut rng, instruction.dice);
-            total += roll.value;
-            rolls.push(roll);
-        }
-        total += instruction.modifier;
+    if instruction.num < 1 {
+        return Err(RollError {
+            message: String::from("You have to roll something!"),
+        });
+    } else if instruction.num > 99 {
+        return Err(RollError {
+            message: String::from(
+                "Are you a god in this game?! Roll a more reasonable number of dice!",
+            ),
+        });
     }
+    for _ in 0..instruction.num {
+        let roll = gen_roll(&mut rng, instruction.die);
+        total += roll.value;
+        rolls.push(roll);
+    }
+    total += instruction.modifier;
+
     Ok(RollResult {
-        instruction: cmd.to_string(),
+        instruction,
         rolls,
         total,
     })
@@ -100,11 +99,11 @@ mod tests {
         let roll = parse_roll("1d8").unwrap();
         assert_eq!(
             roll,
-            [RollInstructions {
+            RollInstruction {
                 num: 1,
-                dice: 8,
+                die: 8,
                 modifier: 0
-            }]
+            }
         );
     }
 
@@ -113,11 +112,11 @@ mod tests {
         let roll = parse_roll("3d6").unwrap();
         assert_eq!(
             roll,
-            [RollInstructions {
+            RollInstruction {
                 num: 3,
-                dice: 6,
+                die: 6,
                 modifier: 0
-            }]
+            }
         );
     }
 
@@ -126,11 +125,11 @@ mod tests {
         let roll = parse_roll("1d8 + 3").unwrap();
         assert_eq!(
             roll,
-            [RollInstructions {
+            RollInstruction {
                 num: 1,
-                dice: 8,
+                die: 8,
                 modifier: 3
-            }]
+            }
         );
     }
 
@@ -173,40 +172,59 @@ mod tests {
 
     #[test]
     fn test_roll_single_dice() {
-        let roll = roll("1d8").unwrap();
+        let roll = roll(RollInstruction {
+            num: 1,
+            die: 8,
+            modifier: 0,
+        })
+        .unwrap();
         assert!(roll.total >= 1);
         assert!(roll.total <= 8);
     }
 
     #[test]
     fn test_roll_multiple_dice() {
-        let roll = roll("3d6").unwrap();
+        let roll = roll(RollInstruction {
+            num: 3,
+            die: 6,
+            modifier: 0,
+        })
+        .unwrap();
         assert!(roll.total >= 3);
         assert!(roll.total <= 18);
     }
 
     #[test]
     fn test_roll_multiple_dice_modifier() {
-        let roll = roll("3d6 + 3").unwrap();
+        let roll = roll(RollInstruction {
+            num: 3,
+            die: 6,
+            modifier: 3,
+        })
+        .unwrap();
         assert!(roll.total >= 6);
         assert!(roll.total <= 21);
     }
 
     #[test]
     #[should_panic]
-    fn test_roll_fail() {
-        roll("3e6").unwrap();
-    }
-
-    #[test]
-    #[should_panic]
     fn test_roll_too_few() {
-        roll("0d6").unwrap();
+        roll(RollInstruction {
+            num: 0,
+            die: 8,
+            modifier: 0,
+        })
+        .unwrap();
     }
 
     #[test]
     #[should_panic]
     fn test_roll_too_many() {
-        roll("100e6").unwrap();
+        roll(RollInstruction {
+            num: 100,
+            die: 8,
+            modifier: 0,
+        })
+        .unwrap();
     }
 }

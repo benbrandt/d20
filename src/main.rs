@@ -1,18 +1,11 @@
 use actix_web::middleware::cors::Cors;
-use actix_web::{http, server, App, HttpResponse, Json, Responder};
+use actix_web::{http, server, App};
 use sentry;
 use sentry_actix::SentryMiddleware;
 use std::env;
 
 mod dice_roller;
-use dice_roller::RollInstruction;
-
-fn roll(info: Json<RollInstruction>) -> impl Responder {
-    match dice_roller::roll(info.into_inner()) {
-        Ok(r) => HttpResponse::Ok().json(r),
-        Err(m) => HttpResponse::BadRequest().json(m),
-    }
-}
+mod handlers;
 
 fn main() {
     let _guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
@@ -31,7 +24,12 @@ fn main() {
         App::new()
             .configure(|app| {
                 Cors::for_app(app)
-                    .resource("/roll/", |r| r.method(http::Method::POST).with(roll))
+                    .resource("/roll/", |r| {
+                        r.method(http::Method::GET).with(handlers::parse_roll)
+                    })
+                    .resource("/roll/", |r| {
+                        r.method(http::Method::POST).with(handlers::roll)
+                    })
                     .register()
             })
             .middleware(SentryMiddleware::new())

@@ -1,5 +1,6 @@
 use log::info;
 use rand::{rngs::ThreadRng, Rng};
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
@@ -25,6 +26,29 @@ pub struct RollResult {
     pub instruction: RollInstruction,
     pub rolls: Vec<DiceResult>,
     pub total: i32,
+}
+
+pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
+    let re = Regex::new(r"(?P<num>\d+)d(?P<dice>\d+)(\s*\+\s*(?P<modifier>\d+))?").unwrap();
+    if re.is_match(cmd) {
+        Ok(re
+            .captures_iter(cmd)
+            .map(|cap| RollInstruction {
+                num: cap["num"].parse().unwrap(),
+                die: cap["dice"].parse().unwrap(),
+                modifier: match cap.name("modifier") {
+                    Some(m) => m.as_str().parse().unwrap(),
+                    None => 0,
+                },
+            })
+            .take(1)
+            .next()
+            .unwrap())
+    } else {
+        Err(RollError {
+            message: String::from("Invalid format. Try again with something like 1d20 or 3d6."),
+        })
+    }
 }
 
 fn gen_roll(rng: &mut ThreadRng, die: i32) -> DiceResult {
@@ -69,6 +93,62 @@ mod tests {
 
     use super::*;
     use std::collections::HashMap;
+
+    #[test]
+    fn test_parse_roll_single_dice() {
+        let roll = parse_roll("1d8").unwrap();
+        assert_eq!(
+            roll,
+            RollInstruction {
+                num: 1,
+                die: 8,
+                modifier: 0
+            }
+        );
+    }
+
+    #[test]
+    fn test_parse_roll_multiple_dice() {
+        let roll = parse_roll("3d6").unwrap();
+        assert_eq!(
+            roll,
+            RollInstruction {
+                num: 3,
+                die: 6,
+                modifier: 0
+            }
+        );
+    }
+
+    #[test]
+    fn test_parse_roll_modifier() {
+        let roll = parse_roll("1d8 + 3").unwrap();
+        assert_eq!(
+            roll,
+            RollInstruction {
+                num: 1,
+                die: 8,
+                modifier: 3
+            }
+        );
+    }
+
+    #[test]
+    fn test_parse_roll_modifier_spacing() {
+        let roll1 = parse_roll("1d8 + 3").unwrap();
+        let roll2 = parse_roll("1d8+ 3").unwrap();
+        let roll3 = parse_roll("1d8 +3").unwrap();
+        let roll4 = parse_roll("1d8+3").unwrap();
+        assert_eq!(roll1, roll2);
+        assert_eq!(roll1, roll3);
+        assert_eq!(roll1, roll4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_parse_roll_fail() {
+        parse_roll("3e6").unwrap();
+    }
 
     #[test]
     fn test_gen_roll() {

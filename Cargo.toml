@@ -5,12 +5,14 @@ authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-actix-web = "*"
+actix-web = { version = "*", features = ["flate2-rust"] }
 env_logger = "*"
 log = "*"
 rand = "*"
+regex = ""
 sentry = "*"
 sentry-actix = "*"
 serde = { version = "*", features = ["derive"] }
 serde_derive = "*"
 serde_json = "*"
+url = "*"

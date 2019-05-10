@@ -9,7 +9,7 @@ actix-web = { version = "*", features = ["flate2-rust"] }
 env_logger = "*"
 log = "*"
 rand = "*"
-regex = ""
+regex = "*"
 sentry = "*"
 sentry-actix = "*"
 serde = { version = "*", features = ["derive"] }

@@ -25,9 +25,7 @@ fn main() {
             .configure(|app| {
                 Cors::for_app(app)
                     .resource("/roll/", |r| {
-                        r.method(http::Method::GET).with(handlers::parse_roll)
-                    })
-                    .resource("/roll/", |r| {
+                        r.method(http::Method::GET).with(handlers::parse_roll);
                         r.method(http::Method::POST).with(handlers::roll)
                     })
                     .register()

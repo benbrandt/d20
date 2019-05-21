@@ -1,6 +1,10 @@
-use actix_web::{HttpResponse, Json, Query, Responder};
 use serde::Deserialize;
-use url::percent_encoding::percent_decode;
+use tide::{
+    error::ResultExt,
+    querystring::ExtractQuery,
+    response::{self, IntoResponse},
+    Context, EndpointResult,
+};
 
 use crate::dice_roller::{self, RollInstruction};
 
@@ -8,25 +12,23 @@ use crate::dice_roller::{self, RollInstruction};
 pub struct RollQuery {
     roll: String,
 }
-pub fn parse_roll(query: Query<RollQuery>) -> impl Responder {
-    let roll = dice_roller::parse_roll(
-        &percent_decode(query.roll.as_bytes())
-            .decode_utf8()
-            .unwrap_or_default(),
-    );
-    match roll {
-        Ok(r) => match dice_roller::roll(r) {
-            Ok(r) => HttpResponse::Ok().json(r),
 
-            Err(m) => HttpResponse::BadRequest().json(m),
-        },
-        Err(m) => HttpResponse::BadRequest().json(m),
+fn roll_to_response(instruction: RollInstruction) -> EndpointResult {
+    dice_roller::roll(instruction)
+        .map(response::json)
+        .map_err(|e| e.into_response().into())
+}
+
+pub async fn parse_roll(cx: Context<()>) -> EndpointResult {
+    let query: RollQuery = cx.url_query()?;
+    let parse_result: EndpointResult<RollInstruction> =
+        dice_roller::parse_roll(&query.roll).map_err(|e| e.into_response().into());
+    match parse_result {
+        Ok(instruction) => roll_to_response(instruction),
+        Err(e) => Err(e.into_response().into()),
     }
 }
 
-pub fn roll(info: Json<RollInstruction>) -> impl Responder {
-    match dice_roller::roll(info.into_inner()) {
-        Ok(r) => HttpResponse::Ok().json(r),
-        Err(m) => HttpResponse::BadRequest().json(m),
-    }
+pub async fn roll(mut cx: Context<()>) -> EndpointResult {
+    roll_to_response(cx.body_json().await.client_err()?)
 }

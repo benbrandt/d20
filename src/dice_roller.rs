@@ -1,7 +1,12 @@
+use http_service::Body;
 use log::info;
 use rand::{rngs::ThreadRng, Rng};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use tide::{
+    http::{response::Response, status::StatusCode},
+    response::IntoResponse,
+};
 
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct RollInstruction {
@@ -13,6 +18,16 @@ pub struct RollInstruction {
 #[derive(Serialize, Debug)]
 pub struct RollError {
     pub message: String,
+}
+
+impl IntoResponse for RollError {
+    fn into_response(self) -> Response<Body> {
+        Response::builder()
+            .status(StatusCode::BAD_REQUEST)
+            .header("Content-Type", "application/json")
+            .body(Body::from(serde_json::to_vec(&self).unwrap()))
+            .unwrap()
+    }
 }
 
 #[derive(Serialize, Debug)]

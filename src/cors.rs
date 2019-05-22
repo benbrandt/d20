@@ -39,7 +39,7 @@ impl Default for CorsBlanket {
             max_age: HeaderValue::from_static(DEFAULT_MAX_AGE),
             methods: HeaderValue::from_static(DEFAULT_METHODS),
             origin: HeaderValue::from_static(STAR),
-            headers: HeaderValue::from_static(STAR),
+            headers: HeaderValue::from_name(header::CONTENT_TYPE),
         }
     }
 }
@@ -66,7 +66,13 @@ impl<Data: Send + Sync + 'static> Middleware<Data> for CorsBlanket {
                     .status(StatusCode::OK)
                     .header(header::ACCESS_CONTROL_ALLOW_ORIGIN, self.origin.clone())
                     .header(header::ACCESS_CONTROL_ALLOW_METHODS, self.methods.clone())
-                    .header(header::ACCESS_CONTROL_ALLOW_HEADERS, self.headers.clone())
+                    .header(
+                        header::ACCESS_CONTROL_ALLOW_HEADERS,
+                        match ctx.headers().get(header::ACCESS_CONTROL_REQUEST_HEADERS) {
+                            Some(v) => v.clone(),
+                            None => self.headers.clone(),
+                        },
+                    )
                     .header(header::ACCESS_CONTROL_MAX_AGE, self.max_age.clone())
                     .body(Body::empty())
                     .unwrap();

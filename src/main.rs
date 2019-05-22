@@ -1,8 +1,13 @@
 #![feature(async_await)]
 #![warn(clippy::all)]
+use http_service::Body;
 use sentry;
 use std::env;
-use tide::{middleware::RootLogger, App};
+use tide::{
+    http::{header, status::StatusCode, Response},
+    middleware::RootLogger,
+    App,
+};
 
 mod cors;
 mod dice_roller;
@@ -28,6 +33,13 @@ fn main() {
 
     app.at("/roll/")
         .get(handlers::parse_roll)
+        .options(async move |_| {
+            Response::builder()
+                .status(StatusCode::OK)
+                .header(header::CONTENT_TYPE, "text/plain")
+                .body(Body::empty())
+                .unwrap()
+        })
         .post(handlers::roll);
 
     app.serve(format!("0.0.0.0:{}", port))

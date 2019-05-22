@@ -2,11 +2,9 @@
 #![warn(clippy::all)]
 use sentry;
 use std::env;
-use tide::{
-    middleware::{DefaultHeaders, RootLogger},
-    App,
-};
+use tide::{middleware::RootLogger, App};
 
+mod cors;
 mod dice_roller;
 mod handlers;
 
@@ -25,14 +23,8 @@ fn main() {
     // Start a server, configuring the resources to serve.
     let mut app = App::new(());
 
-    app.middleware(RootLogger::new()).middleware(
-        DefaultHeaders::new()
-            .header("Access-Control-Allow-Origin", "*")
-            .header(
-                "Access-Control-Allow-Methods",
-                "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-            ),
-    );
+    app.middleware(RootLogger::new())
+        .middleware(cors::CorsBlanket::new());
 
     app.at("/roll/")
         .get(handlers::parse_roll)

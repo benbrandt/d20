@@ -2,7 +2,10 @@ use futures::future::BoxFuture;
 use futures::prelude::*;
 use http_service::Body;
 use tide::{
-    http::{header::{self, HeaderValue}, HeaderMap, Method, Response, StatusCode},
+    http::{
+        header::{self, HeaderValue},
+        HeaderMap, Method, Response, StatusCode,
+    },
     middleware::{Middleware, Next},
     Context,
 };
@@ -52,7 +55,11 @@ impl CorsBlanket {
 }
 
 impl<Data: Send + Sync + 'static> Middleware<Data> for CorsBlanket {
-    fn handle<'a>(&'a self, ctx: Context<Data>, next: Next<'a, Data>) -> BoxFuture<'a, tide::Response> {
+    fn handle<'a>(
+        &'a self,
+        ctx: Context<Data>,
+        next: Next<'a, Data>,
+    ) -> BoxFuture<'a, tide::Response> {
         FutureExt::boxed(async move {
             if ctx.method() == Method::OPTIONS {
                 return Response::builder()

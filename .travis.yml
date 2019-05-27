@@ -4,35 +4,53 @@ branches:
   only:
     - master
 
-cache:
-  directories:
-    - $HOME/.cargo
+jobs:
+  include:
+    # Run on cron to generate a PR
+    - stage: bump nightly
+      if: type = cron
 
-# https://levans.fr/rust_travis_cache.html
-before_cache:
-  - rm -rf $HOME/.cargo/registry
+      addons:
+        apt:
+          packages:
+            - hub
 
-addons:
-  apt:
-    packages:
-      - libssl-dev
-      - jq
+      script:
+        - ./bin/nightly-pr.sh
 
-before_install:
-  - rustup component add clippy
-  - rustup component add rustfmt
-  # https://github.com/xd009642/tarpaulin/issues/150
-  - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+    # Default tests
+    - stage: test
+      if: type != cron
 
-script:
-  - cargo build
-  - cargo fmt -- --check
-  - cargo clippy --all-targets --all-features -- -D warnings
-  - cargo test
+      cache:
+        directories:
+          - $HOME/.cargo
 
-after_success: |
-  cargo tarpaulin --out Xml
-  bash <(curl -s https://codecov.io/bash)
+        # https://levans.fr/rust_travis_cache.html
+        before_cache:
+          - rm -rf $HOME/.cargo/registry
+
+        addons:
+          apt:
+            packages:
+              - jq
+              - libssl-dev
+
+        before_install:
+          - rustup component add clippy
+          - rustup component add rustfmt
+          # https://github.com/xd009642/tarpaulin/issues/150
+          - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+
+        script:
+          - cargo build
+          - cargo fmt -- --check
+          - cargo clippy --all-targets --all-features -- -D warnings
+          - cargo test
+
+        after_success: |
+          cargo tarpaulin --out Xml
+          bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:

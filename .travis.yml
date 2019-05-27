@@ -26,31 +26,31 @@ jobs:
         directories:
           - $HOME/.cargo
 
-        # https://levans.fr/rust_travis_cache.html
-        before_cache:
-          - rm -rf $HOME/.cargo/registry
+      # https://levans.fr/rust_travis_cache.html
+      before_cache:
+        - rm -rf $HOME/.cargo/registry
 
-        addons:
-          apt:
-            packages:
-              - jq
-              - libssl-dev
+      addons:
+        apt:
+          packages:
+            - jq
+            - libssl-dev
 
-        before_install:
-          - rustup component add clippy
-          - rustup component add rustfmt
-          # https://github.com/xd009642/tarpaulin/issues/150
-          - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+      before_install:
+        - rustup component add clippy
+        - rustup component add rustfmt
+        # https://github.com/xd009642/tarpaulin/issues/150
+        - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
 
-        script:
-          - cargo build
-          - cargo fmt -- --check
-          - cargo clippy --all-targets --all-features -- -D warnings
-          - cargo test
+      script:
+        - cargo build
+        - cargo fmt -- --check
+        - cargo clippy --all-targets --all-features -- -D warnings
+        - cargo test
 
-        after_success: |
-          cargo tarpaulin --out Xml
-          bash <(curl -s https://codecov.io/bash)
+      after_success: |
+        cargo tarpaulin --out Xml
+        bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:

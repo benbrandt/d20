@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Install Hub
+HUB_DIR=hub-linux-amd64-2.11.2
+curl -sL "https://github.com/github/hub/releases/download/v2.11.2/$HUB_DIR.tgz" | tar xz
+
 # YYYY-mm-dd format
 CURRENT_DATE=`date +"%F"`
 TOOLCHAIN="nightly-$CURRENT_DATE"
@@ -16,8 +20,8 @@ git add 'rust-toolchain'
 git commit -m "$MESSAGE"
 
 # Create pull request
-# Make sure `hub` is installed
-hub pull-request -m "$MESSAGE" --push --reviewer benbrandt --labels rust,toolchain
+./$HUB_DIR/bin/hub pull-request -m "$MESSAGE" --push --reviewer benbrandt --labels rust,toolchain
 
 # Cleanup
 git checkout master
+rm -rf $HUB_DIR

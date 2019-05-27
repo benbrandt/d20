@@ -10,11 +10,6 @@ jobs:
     - stage: bump nightly
       if: type = cron
 
-      addons:
-        apt:
-          packages:
-            - hub
-
       script:
         - ./bin/nightly-pr.sh
 
@@ -40,7 +35,7 @@ jobs:
         - rustup component add clippy
         - rustup component add rustfmt
         # https://github.com/xd009642/tarpaulin/issues/150
-        - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+        - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --force
 
       script:
         - cargo build

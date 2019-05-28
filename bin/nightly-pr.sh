@@ -21,4 +21,4 @@ echo $TOOLCHAIN > 'rust-toolchain'
 ./$HUB_DIR/bin/hub push --set-upstream origin rust-$TOOLCHAIN
 
 # Create pull request
-./$HUB_DIR/bin/hub pull-request -m "$MESSAGE" --reviewer benbrandt
+./$HUB_DIR/bin/hub pull-request -m "$MESSAGE"

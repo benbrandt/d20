@@ -18,9 +18,10 @@ echo $TOOLCHAIN > 'rust-toolchain'
 # Stage and commit the change
 git add 'rust-toolchain'
 git commit -m "$MESSAGE"
+git push --upstream origin rust-$TOOLCHAIN
 
 # Create pull request
-./$HUB_DIR/bin/hub pull-request -m "$MESSAGE" --push --reviewer benbrandt --labels rust,toolchain
+./$HUB_DIR/bin/hub pull-request -m "$MESSAGE" --reviewer benbrandt
 
 # Cleanup
 git checkout master

@@ -10,19 +10,15 @@ TOOLCHAIN="nightly-$CURRENT_DATE"
 MESSAGE="Update toolchain to $TOOLCHAIN"
 
 # Checkout a branch for today
-git checkout -b rust-$TOOLCHAIN
+./$HUB_DIR/bin/hub checkout -b rust-$TOOLCHAIN
 
 # Save the date to the toolchain file
 echo $TOOLCHAIN > 'rust-toolchain'
 
 # Stage and commit the change
-git add 'rust-toolchain'
-git commit -m "$MESSAGE"
-git push --set-upstream origin rust-$TOOLCHAIN
+./$HUB_DIR/bin/hub add 'rust-toolchain'
+./$HUB_DIR/bin/hub commit -m "$MESSAGE"
+./$HUB_DIR/bin/hub push --set-upstream origin rust-$TOOLCHAIN
 
 # Create pull request
 ./$HUB_DIR/bin/hub pull-request -m "$MESSAGE" --reviewer benbrandt
-
-# Cleanup
-git checkout master
-rm -rf $HUB_DIR

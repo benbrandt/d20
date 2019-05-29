@@ -39,6 +39,10 @@ jobs:
       before_install:
         - rustup component add clippy
         - rustup component add rustfmt
+        # Make sure local dev environment will work as well for nightly toolchains
+        - rustup component add rls
+        - rustup component add rust-analysis
+        - rustup component add rust-src
         # https://github.com/xd009642/tarpaulin/issues/150
         - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin --force
 

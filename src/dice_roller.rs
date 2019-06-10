@@ -8,6 +8,9 @@ use tide::{
     response::IntoResponse,
 };
 
+// All the possible D&D dice
+const DICE_VALUES: [i32; 7] = [4, 6, 8, 10, 12, 20, 100];
+
 #[derive(Debug, Deserialize, PartialEq, Serialize)]
 pub struct RollInstruction {
     pub num: i32,
@@ -70,7 +73,18 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
     let mut rng = rand::thread_rng();
     let mut total = 0;
     let mut rolls = Vec::new();
-    if instruction.num < 1 {
+    if !DICE_VALUES.iter().any(|d| d == &instruction.die) {
+        return Err(RollError {
+            message: format!(
+                "Not a valid die. Try one of {}",
+                DICE_VALUES
+                    .iter()
+                    .map(|d| format!("d{}", d))
+                    .collect::<Vec<String>>()
+                    .join(", ")
+            ),
+        });
+    } else if instruction.num < 1 {
         return Err(RollError {
             message: String::from("You have to roll something!"),
         });
@@ -97,9 +111,6 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
 
 #[cfg(test)]
 mod tests {
-    // All the possible D&D dice
-    const DICE_VALUES: [i32; 7] = [4, 6, 8, 10, 12, 20, 100];
-
     use super::*;
     use std::collections::HashMap;
 
@@ -213,6 +224,17 @@ mod tests {
         .unwrap();
         assert!(roll.total >= 6);
         assert!(roll.total <= 21);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_roll_invalid_dice() {
+        roll(RollInstruction {
+            num: 0,
+            die: 9,
+            modifier: 0,
+        })
+        .unwrap();
     }
 
     #[test]

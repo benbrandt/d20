@@ -31,15 +31,9 @@ impl IntoResponse for RollError {
 }
 
 #[derive(Serialize, Debug)]
-pub struct DiceResult {
-    pub die: i32,
-    pub value: i32,
-}
-
-#[derive(Serialize, Debug)]
 pub struct RollResult {
     pub instruction: RollInstruction,
-    pub rolls: Vec<DiceResult>,
+    pub rolls: Vec<i32>,
     pub total: i32,
 }
 
@@ -66,10 +60,10 @@ pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
     }
 }
 
-fn gen_roll(rng: &mut ThreadRng, die: i32) -> DiceResult {
+fn gen_roll(rng: &mut ThreadRng, die: i32) -> i32 {
     let roll = rng.gen_range(1, die + 1);
     info!("Die: {}, Roll: {}", die, roll);
-    DiceResult { die, value: roll }
+    roll
 }
 
 pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
@@ -89,7 +83,7 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
     }
     for _ in 0..instruction.num {
         let roll = gen_roll(&mut rng, instruction.die);
-        total += roll.value;
+        total += roll;
         rolls.push(roll);
     }
     total += instruction.modifier;
@@ -174,7 +168,7 @@ mod tests {
             // Try and get a sample that will have an occurrence for every value
             for _ in 0..d * d {
                 let roll = gen_roll(&mut rng, *d);
-                let count = occurrences.entry(roll.value).or_insert(0);
+                let count = occurrences.entry(roll).or_insert(0);
                 *count += 1;
             }
 

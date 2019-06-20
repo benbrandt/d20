@@ -3,11 +3,7 @@ use crate::{
     State,
 };
 use juniper::{EmptyMutation, FieldResult};
-use tide::{
-    error::ResultExt,
-    http::{StatusCode},
-    response, Context, EndpointResult,
-};
+use tide::{error::ResultExt, http::StatusCode, response, Context, EndpointResult};
 
 impl juniper::Context for State {}
 

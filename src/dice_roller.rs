@@ -1,8 +1,10 @@
 use http_service::Body;
+use juniper::GraphQLObject;
 use log::info;
 use rand::{rngs::ThreadRng, Rng};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use std::fmt;
 use tide::{
     http::{response::Response, status::StatusCode},
     response::IntoResponse,
@@ -11,16 +13,26 @@ use tide::{
 // All the possible D&D dice
 const DICE_VALUES: [i32; 7] = [4, 6, 8, 10, 12, 20, 100];
 
-#[derive(Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Debug, Deserialize, GraphQLObject, PartialEq, Serialize)]
+/// Instructions for a roll
 pub struct RollInstruction {
+    /// Number of dice to roll
     pub num: i32,
+    /// Number of sides on the dice
     pub die: i32,
+    /// Additional modifier to add to the roll
     pub modifier: i32,
 }
 
 #[derive(Serialize, Debug)]
 pub struct RollError {
     pub message: String,
+}
+
+impl fmt::Display for RollError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.message)
+    }
 }
 
 impl IntoResponse for RollError {
@@ -33,10 +45,14 @@ impl IntoResponse for RollError {
     }
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, GraphQLObject)]
+/// Result of a roll
 pub struct RollResult {
+    /// The instruction passed in to roll the dice
     pub instruction: RollInstruction,
+    /// The results of all rolls made
     pub rolls: Vec<i32>,
+    /// The total value of the entire roll
     pub total: i32,
 }
 

@@ -1,3 +1,5 @@
+use crate::dice_roller::{self, RollInstruction};
+use crate::State;
 use serde::Deserialize;
 use tide::{
     error::ResultExt,
@@ -5,8 +7,6 @@ use tide::{
     response::{self, IntoResponse},
     Context, EndpointResult,
 };
-
-use crate::dice_roller::{self, RollInstruction};
 
 #[derive(Deserialize)]
 pub struct RollQuery {
@@ -19,7 +19,7 @@ fn roll_to_response(instruction: RollInstruction) -> EndpointResult {
         .map_err(|e| e.into_response().into())
 }
 
-pub async fn parse_roll(cx: Context<()>) -> EndpointResult {
+pub async fn parse_roll(cx: Context<State>) -> EndpointResult {
     let query: RollQuery = cx.url_query()?;
     let parse_result: EndpointResult<RollInstruction> =
         dice_roller::parse_roll(&query.roll).map_err(|e| e.into_response().into());
@@ -29,6 +29,6 @@ pub async fn parse_roll(cx: Context<()>) -> EndpointResult {
     }
 }
 
-pub async fn roll(mut cx: Context<()>) -> EndpointResult {
+pub async fn roll(mut cx: Context<State>) -> EndpointResult {
     roll_to_response(cx.body_json().await.client_err()?)
 }

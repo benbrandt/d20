@@ -11,7 +11,13 @@ use tide::{
 
 mod cors;
 mod dice_roller;
+mod graphql;
 mod handlers;
+
+// First, we define `State` that holds accumulator state. This is accessible as state in
+// Tide, and as executor context in Juniper.
+#[derive(Clone, Default)]
+pub struct State(());
 
 fn main() {
     let _guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
@@ -26,17 +32,21 @@ fn main() {
         .expect("PORT must be a number");
 
     // Start a server, configuring the resources to serve.
-    let mut app = App::new(());
+    let mut app = App::new(State::default());
 
     app.middleware(RootLogger::new())
         .middleware(cors::CorsBlanket::new());
+
+    app.at("/graphql").post(graphql::handle_graphql);
+    #[cfg(debug_assertions)]
+    app.at("/graphiql").get(graphql::handle_graphiql);
 
     app.at("/roll/")
         .get(handlers::parse_roll)
         .options(async move |_| {
             Response::builder()
                 .status(StatusCode::OK)
-                .header(header::CONTENT_TYPE, "text/plain")
+                .header(header::CONTENT_TYPE, mime::TEXT_PLAIN.as_ref())
                 .body(Body::empty())
                 .unwrap()
         })

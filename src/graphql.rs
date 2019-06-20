@@ -2,11 +2,10 @@ use crate::{
     dice_roller::{self, RollInstruction, RollResult},
     State,
 };
-use http_service::Body;
-use juniper::{graphiql::graphiql_source, EmptyMutation, FieldResult};
+use juniper::{EmptyMutation, FieldResult};
 use tide::{
     error::ResultExt,
-    http::{header, Response, StatusCode},
+    http::{StatusCode},
     response, Context, EndpointResult,
 };
 
@@ -65,7 +64,12 @@ pub async fn handle_graphql(mut cx: Context<State>) -> EndpointResult {
     Ok(resp)
 }
 
+#[cfg(debug_assertions)]
 pub async fn handle_graphiql(_: Context<State>) -> EndpointResult {
+    use http_service::Body;
+    use juniper::graphiql::graphiql_source;
+    use tide::http::{header, Response};
+
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())

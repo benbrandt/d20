@@ -38,6 +38,7 @@ fn main() {
         .middleware(cors::CorsBlanket::new());
 
     app.at("/graphql").post(graphql::handle_graphql);
+    #[cfg(debug_assertions)]
     app.at("/graphiql").get(graphql::handle_graphiql);
 
     app.at("/roll/")

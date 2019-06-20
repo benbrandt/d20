@@ -1,3 +1,5 @@
+use crate::dice_roller::{self, RollInstruction};
+use crate::State;
 use serde::Deserialize;
 use tide::{
     error::ResultExt,
@@ -5,9 +7,6 @@ use tide::{
     response::{self, IntoResponse},
     Context, EndpointResult,
 };
-
-use crate::dice_roller::{self, RollInstruction};
-use crate::State;
 
 #[derive(Deserialize)]
 pub struct RollQuery {

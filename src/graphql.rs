@@ -1,34 +1,54 @@
-use crate::State;
+use crate::{
+    dice_roller::{self, RollInstruction, RollResult},
+    State,
+};
 use http_service::Body;
-use juniper::{graphiql::graphiql_source, graphql_object};
-use std::sync::atomic;
+use juniper::{graphiql::graphiql_source, FieldResult};
 use tide::{
     error::ResultExt,
     http::{header, Response, StatusCode},
     response, Context, EndpointResult,
 };
 
-// We define `Query` unit struct here. GraphQL queries will refer to this struct. The struct itself
-// doesn't have any associated state (and there's no need to do so), but instead it exposes the
-// accumulator state from the context.
+impl juniper::Context for State {}
+
 struct Query;
 
-graphql_object!(Query: State |&self| {
-    // GraphQL integers are signed and 32 bits long.
-    field accumulator(&executor) -> i32 as "Current value of the accumulator" {
-        executor.context().0.load(atomic::Ordering::Relaxed) as i32
-    }
-});
+#[juniper::object(
+    // Here we specify the context type for the object.
+    // We need to do this in every type that
+    // needs access to the context.
+    Context = State,
+)]
+impl Query {
+    // Arguments to resolvers can either be simple types or input objects.
+    // To gain access to the context, we specify a argument
+    // that is a reference to the Context type.
+    // Juniper automatically injects the correct context here.
 
-// Here is `Mutation` unit struct. GraphQL mutations will refer to this struct. This is similar to
-// `Query`, but it provides the way to "mutate" the accumulator state.
+    #[graphql(
+        arguments(
+            num(description = "Number of dice to roll"),
+            die(description = "Number of sides on the die"),
+            modifier(
+                default = 0,
+                description = "Additional modifier to the roll",
+            ),
+        )
+    )]
+    fn roll(context: &State, num: i32, die: i32, modifier: i32) -> FieldResult<RollResult> {
+        Ok(dice_roller::roll(RollInstruction { num, die, modifier })?)
+    }
+}
+
+// Now, we do the same for our Mutation type.
+
 struct Mutation;
 
-graphql_object!(Mutation: State |&self| {
-    field add(&executor, by: i32) -> i32 as "Add given value to the accumulator." {
-        executor.context().0.fetch_add(by as isize, atomic::Ordering::Relaxed) as i32 + by
-    }
-});
+#[juniper::object(
+    Context = State,
+)]
+impl Mutation {}
 
 // Adding `Query` and `Mutation` together we get `Schema`, which describes, well, the whole GraphQL
 // schema.
@@ -50,16 +70,10 @@ pub async fn handle_graphql(mut cx: Context<State>) -> EndpointResult {
     Ok(resp)
 }
 
-pub async fn handle_graphiql(cx: Context<State>) -> EndpointResult {
-    let html = graphiql_source(
-        &cx.request()
-            .uri()
-            .to_string()
-            .replace("graphiql", "graphql"),
-    );
+pub async fn handle_graphiql(_: Context<State>) -> EndpointResult {
     Ok(Response::builder()
         .status(StatusCode::OK)
         .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
-        .body(Body::from(html))
+        .body(Body::from(graphiql_source("/graphql")))
         .expect("failed to build graphiql"))
 }

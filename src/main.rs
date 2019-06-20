@@ -3,7 +3,6 @@
 use http_service::Body;
 use sentry;
 use std::env;
-use std::sync::{atomic, Arc};
 use tide::{
     http::{header, status::StatusCode, Response},
     middleware::RootLogger,
@@ -18,9 +17,7 @@ mod handlers;
 // First, we define `State` that holds accumulator state. This is accessible as state in
 // Tide, and as executor context in Juniper.
 #[derive(Clone, Default)]
-pub struct State(Arc<atomic::AtomicIsize>);
-
-impl juniper::Context for State {}
+pub struct State(());
 
 fn main() {
     let _guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");

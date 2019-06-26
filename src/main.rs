@@ -40,6 +40,8 @@ fn main() {
     app.at("/graphql").post(graphql::handle_graphql);
     #[cfg(debug_assertions)]
     app.at("/graphiql").get(graphql::handle_graphiql);
+    #[cfg(debug_assertions)]
+    app.at("/schema").get(graphql::handle_schema);
 
     app.at("/roll/")
         .get(handlers::parse_roll)

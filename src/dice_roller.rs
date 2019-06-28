@@ -24,6 +24,27 @@ pub struct RollInstruction {
     pub modifier: i32,
 }
 
+impl fmt::Display for RollInstruction {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}d{}", self.num, self.die)?;
+        if self.modifier != 0 {
+            write!(
+                f,
+                " {} {}",
+                if self.modifier < 0 { "-" } else { "+" },
+                self.modifier.abs()
+            )?;
+        }
+        Ok(())
+    }
+}
+
+impl From<RollInstruction> for String {
+    fn from(instruction: RollInstruction) -> Self {
+        format!("{}", instruction)
+    }
+}
+
 #[derive(Serialize, Debug)]
 pub struct RollError {
     pub message: String,
@@ -49,7 +70,7 @@ impl IntoResponse for RollError {
 /// Result of a roll
 pub struct RollResult {
     /// The instruction passed in to roll the dice
-    pub instruction: RollInstruction,
+    pub instruction: String,
     /// The results of all rolls made
     pub rolls: Vec<i32>,
     /// The total value of the entire roll
@@ -119,7 +140,7 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
     total += instruction.modifier;
 
     Ok(RollResult {
-        instruction,
+        instruction: instruction.into(),
         rolls,
         total,
     })

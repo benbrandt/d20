@@ -22,13 +22,7 @@ jobs:
     - stage: test
       if: type != cron
 
-      cache:
-        directories:
-          - $HOME/.cargo
-
-      # https://levans.fr/rust_travis_cache.html
-      before_cache:
-        - rm -rf $HOME/.cargo/registry
+      cache: cargo
 
       addons:
         apt:

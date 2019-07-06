@@ -8,6 +8,7 @@ use tide::{
     middleware::{CorsMiddleware, RequestLogger},
     App,
 };
+use tide_compression::{Compression, Decompression};
 
 mod dice_roller;
 mod graphql;
@@ -34,7 +35,9 @@ fn main() {
     let mut app = App::with_state(State::default());
 
     app.middleware(RequestLogger::new())
-        .middleware(CorsMiddleware::new());
+        .middleware(CorsMiddleware::new())
+        .middleware(Compression::new())
+        .middleware(Decompression::new());
 
     app.at("/graphql").post(graphql::handle_graphql);
     #[cfg(debug_assertions)]

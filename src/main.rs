@@ -5,11 +5,10 @@ use sentry;
 use std::env;
 use tide::{
     http::{header, status::StatusCode, Response},
-    middleware::RootLogger,
+    middleware::{CorsMiddleware, RequestLogger},
     App,
 };
 
-mod cors;
 mod dice_roller;
 mod graphql;
 mod handlers;
@@ -32,10 +31,10 @@ fn main() {
         .expect("PORT must be a number");
 
     // Start a server, configuring the resources to serve.
-    let mut app = App::new(State::default());
+    let mut app = App::with_state(State::default());
 
-    app.middleware(RootLogger::new())
-        .middleware(cors::CorsBlanket::new());
+    app.middleware(RequestLogger::new())
+        .middleware(CorsMiddleware::new());
 
     app.at("/graphql").post(graphql::handle_graphql);
     #[cfg(debug_assertions)]
@@ -54,6 +53,5 @@ fn main() {
         })
         .post(handlers::roll);
 
-    app.serve(format!("0.0.0.0:{}", port))
-        .unwrap_or_else(|_| panic!("Can not bind to port {:?}", &port));
+    app.run(format!("0.0.0.0:{}", port)).unwrap();
 }

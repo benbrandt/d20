@@ -3,7 +3,7 @@ use crate::State;
 use serde::Deserialize;
 use tide::{
     error::ResultExt,
-    querystring::ExtractQuery,
+    querystring::ContextExt,
     response::{self, IntoResponse},
     Context, EndpointResult,
 };

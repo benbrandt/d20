@@ -6,7 +6,6 @@ edition = "2018"
 
 [dependencies]
 env_logger = "0.6"
-futures-preview = "0.3.0-alpha.16"
 http-service = "0.2"
 jsonwebtoken = "6"
 juniper = "0.12"
@@ -18,4 +17,9 @@ sentry = "0.15"
 serde = { version = "1", features = ["derive"] }
 serde_derive = "1"
 serde_json = "1"
-tide = "0.2"
+tide = { git = "https://github.com/rustasync/tide" }
+
+[patch.crates-io]
+http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
+http-service-hyper = { git = "https://github.com/rustasync/http-service", branch = "master" }
+http-service-mock = { git = "https://github.com/rustasync/http-service", branch = "master" }

@@ -49,7 +49,7 @@ type Schema = juniper::RootNode<'static, Query, EmptyMutation<State>>;
 pub async fn handle_graphql(mut cx: Context<State>) -> EndpointResult {
     let query: GraphQLRequest = cx.body_json().await.client_err()?;
     let schema = Schema::new(Query, EmptyMutation::new());
-    let response = query.execute(&schema, cx.app_data());
+    let response = query.execute(&schema, cx.state());
     let status = if response.is_ok() {
         StatusCode::OK
     } else {
@@ -79,7 +79,7 @@ pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
     // Run the built-in introspection query.
     let (res, _errors) = introspect(
         &Schema::new(Query, EmptyMutation::new()),
-        &cx.app_data(),
+        &cx.state(),
         IntrospectionFormat::default(),
     )
     .unwrap();

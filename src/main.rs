@@ -1,4 +1,4 @@
-#![feature(async_await)]
+#![feature(async_await, async_closure)]
 #![warn(clippy::all)]
 use http_service::Body;
 use sentry;

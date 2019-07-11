@@ -12,6 +12,7 @@ juniper = "0.12"
 log = "0.4"
 mime = "0.3"
 rand = "0.7"
+rand_pcg = "0.2"
 regex = "1"
 sentry = "0.15"
 serde = { version = "1", features = ["derive"] }

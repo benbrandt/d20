@@ -1,7 +1,8 @@
 use http_service::Body;
 use juniper::GraphQLObject;
 use log::info;
-use rand::{rngs::ThreadRng, Rng};
+use rand::{Rng, SeedableRng};
+use rand_pcg::Pcg64;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -100,14 +101,14 @@ pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
     }
 }
 
-fn gen_roll(rng: &mut ThreadRng, die: i32) -> i32 {
+fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
     let roll = rng.gen_range(1, die + 1);
     info!("Die: {}, Roll: {}", die, roll);
     roll
 }
 
 pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
-    let mut rng = rand::thread_rng();
+    let mut rng = Pcg64::from_entropy();
     let mut total = 0;
     let mut rolls = Vec::new();
     if !DICE_VALUES.iter().any(|d| d == &instruction.die) {

@@ -1,10 +1,8 @@
 #![feature(async_await, async_closure)]
 #![warn(clippy::all)]
-use http_service::Body;
 use sentry;
 use std::env;
 use tide::{
-    http::{header, status::StatusCode, Response},
     middleware::{CorsMiddleware, RequestLogger},
     App,
 };
@@ -47,13 +45,6 @@ fn main() {
 
     app.at("/roll/")
         .get(handlers::parse_roll)
-        .options(async move |_| {
-            Response::builder()
-                .status(StatusCode::OK)
-                .header(header::CONTENT_TYPE, mime::TEXT_PLAIN.as_ref())
-                .body(Body::empty())
-                .unwrap()
-        })
         .post(handlers::roll);
 
     app.run(format!("0.0.0.0:{}", port)).unwrap();

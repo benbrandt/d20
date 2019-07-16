@@ -27,6 +27,8 @@ jobs:
       before_cache:
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
         - cargo sweep --file
+        # Don't cache nightly
+        - rustup toolchain list | grep "nightly" | while read -r line; do rustup toolchain uninstall $line; done
 
       addons:
         apt:
@@ -55,11 +57,7 @@ jobs:
         - cargo fmt --all -- --check
         - cargo build
         - cargo clippy --all-targets --all-features -- -D warnings
-        - cargo test --all
-
-      after_success: |
-        cargo tarpaulin --out Xml
-        bash <(curl -s https://codecov.io/bash)
+        - cargo test --all && cargo tarpaulin --out Xml && bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email:

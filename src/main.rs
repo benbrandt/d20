@@ -1,4 +1,4 @@
-#![feature(async_await, async_closure)]
+#![feature(async_await)]
 #![warn(clippy::all)]
 use sentry;
 use std::env;

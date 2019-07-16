@@ -1603,7 +1603,7 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "fnv 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1623,7 +1623,7 @@ dependencies = [
 [[package]]
 name = "tide-compression"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "accept-encoding 0.2.0-alpha.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-compression 0.1.0-alpha.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1637,7 +1637,7 @@ dependencies = [
 [[package]]
 name = "tide-cookies"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "cookie 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1649,7 +1649,7 @@ dependencies = [
 [[package]]
 name = "tide-core"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1662,7 +1662,7 @@ dependencies = [
 [[package]]
 name = "tide-cors"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1673,7 +1673,7 @@ dependencies = [
 [[package]]
 name = "tide-forms"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1688,7 +1688,7 @@ dependencies = [
 [[package]]
 name = "tide-headers"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1699,7 +1699,7 @@ dependencies = [
 [[package]]
 name = "tide-log"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1710,7 +1710,7 @@ dependencies = [
 [[package]]
 name = "tide-querystring"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#36c15fd4ca67fcb269e7bc87d2ceb6eeb8826483"
+source = "git+https://github.com/rustasync/tide#eed3041ad86697e9fd855fe752289aff631b76bd"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",

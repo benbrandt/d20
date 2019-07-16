@@ -27,8 +27,7 @@ jobs:
       before_cache:
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
         - cargo sweep --file
-        # Don't cache nightly
-        - rustup toolchain list | grep "nightly" | while read -r line; do rustup toolchain uninstall $line; done
+        - ./bin/nightly-cleanup.sh
 
       addons:
         apt:

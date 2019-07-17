@@ -3,5 +3,6 @@ table! {
         die -> Int2,
         roll -> Int2,
         roll_count -> Int8,
+        updated_at -> Timestamp,
     }
 }

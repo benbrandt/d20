@@ -5,7 +5,8 @@ authors = ["Ben Brandt <benjamin.j.brandt@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-diesel = { version = "1", features = ["postgres"] }
+chrono = "0.4"
+diesel = { version = "1", features = ["postgres", "extras"] }
 dotenv = "0.14"
 env_logger = "0.6"
 http-service = "0.2"

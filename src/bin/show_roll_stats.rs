@@ -9,6 +9,9 @@ fn main() {
 
     println!("Displaying {} stats", results.len());
     for stat in results {
-        println!("d{:<3} - {:3}: {}", stat.die, stat.roll, stat.roll_count);
+        println!(
+            "d{:<3} - {:3}: {:10} (Updated: {})",
+            stat.die, stat.roll, stat.roll_count, stat.updated_at
+        );
     }
 }

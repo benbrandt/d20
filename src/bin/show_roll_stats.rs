@@ -1,8 +1,11 @@
-use d20::{establish_connection, models::RollStat, schema::roll_stats};
+use d20::{db_pool, models::RollStat, schema::roll_stats};
 use diesel::prelude::*;
+use dotenv::dotenv;
 
 fn main() {
-    let connection = establish_connection();
+    dotenv().ok();
+    let pool = db_pool();
+    let connection = pool.get().unwrap();
     let results = roll_stats::table
         .load::<RollStat>(&connection)
         .expect("Error loading stats");

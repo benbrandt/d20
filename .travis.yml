@@ -22,13 +22,6 @@ jobs:
     - stage: test
       if: type != cron
 
-      cache: cargo
-
-      before_cache:
-        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
-        - cargo sweep --file
-        - ./bin/nightly-cleanup.sh
-
       addons:
         apt:
           packages:
@@ -36,16 +29,10 @@ jobs:
             - libssl-dev
 
       before_install:
-        - rustup component add clippy
-        - rustup component add rustfmt
-        # Make sure local dev environment will work as well for nightly toolchains
-        - rustup component add rls
-        - rustup component add rust-analysis
-        - rustup component add rust-src
-        # Cargo tools
+        - ./bin/rust-setup.sh
+        # Intall cargo tools if not installed
         - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
         - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
-        # https://github.com/xd009642/tarpaulin/issues/150
         - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-tarpaulin --force
 
       before_script:
@@ -57,6 +44,13 @@ jobs:
         - cargo build --all
         - cargo clippy --all-targets --all-features -- -D warnings
         - cargo test --all && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
+
+      before_cache:
+        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
+        - cargo sweep --file
+        - ./bin/nightly-cleanup.sh
+
+      cache: cargo
 
 notifications:
   email:

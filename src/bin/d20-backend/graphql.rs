@@ -3,7 +3,7 @@ use crate::{
     handlers::roll_stats,
     State,
 };
-use juniper::{http::GraphQLRequest, EmptyMutation, FieldError, FieldResult};
+use juniper::{http::GraphQLRequest, EmptyMutation, FieldResult};
 use tide::{error::ResultExt, http::StatusCode, response, Context, EndpointResult};
 
 impl juniper::Context for State {}
@@ -29,7 +29,7 @@ impl Query {
     ))]
     fn roll(context: &State, num: i32, die: i32, modifier: i32) -> FieldResult<RollResult> {
         let result = dice_roller::roll(RollInstruction { num, die, modifier })?;
-        roll_stats(context, die, &result.rolls).map_err(FieldError::from)?;
+        roll_stats(context, die, &result.rolls)?;
         Ok(result)
     }
 }

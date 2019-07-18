@@ -1,5 +1,6 @@
 use crate::{
     dice_roller::{self, RollInstruction, RollResult},
+    handlers::roll_stats,
     State,
 };
 use juniper::{http::GraphQLRequest, EmptyMutation, FieldResult};
@@ -27,7 +28,9 @@ impl Query {
         modifier(default = 0, description = "Additional modifier to the roll",),
     ))]
     fn roll(context: &State, num: i32, die: i32, modifier: i32) -> FieldResult<RollResult> {
-        Ok(dice_roller::roll(RollInstruction { num, die, modifier })?)
+        let result = dice_roller::roll(RollInstruction { num, die, modifier })?;
+        roll_stats(context, die, &result.rolls)?;
+        Ok(result)
     }
 }
 
@@ -89,10 +92,12 @@ pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use dotenv::dotenv;
     use juniper::{EmptyMutation, Variables};
 
     #[test]
     fn test_roll_query() {
+        dotenv().ok();
         // Create a context object.
         let ctx = State::default();
 
@@ -122,6 +127,7 @@ mod tests {
 
     #[test]
     fn test_roll_query_error() {
+        dotenv().ok();
         // Create a context object.
         let ctx = State::default();
 

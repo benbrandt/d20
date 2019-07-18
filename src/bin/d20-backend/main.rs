@@ -1,5 +1,9 @@
 #![feature(async_await)]
 #![warn(clippy::all)]
+use d20::redis_pool;
+use diesel::r2d2::Pool;
+use dotenv::dotenv;
+use r2d2_redis::RedisConnectionManager;
 use sentry;
 use std::env;
 use tide::{
@@ -14,10 +18,22 @@ mod handlers;
 
 // First, we define `State` that holds accumulator state. This is accessible as state in
 // Tide, and as executor context in Juniper.
-#[derive(Clone, Default)]
-pub struct State(());
+#[derive(Clone)]
+pub struct State {
+    redis: Pool<RedisConnectionManager>,
+}
+
+impl Default for State {
+    fn default() -> Self {
+        Self {
+            redis: redis_pool(),
+        }
+    }
+}
 
 fn main() {
+    dotenv().ok();
+
     let _guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
     env::set_var("RUST_BACKTRACE", "1");
     sentry::integrations::env_logger::init(None, Default::default());

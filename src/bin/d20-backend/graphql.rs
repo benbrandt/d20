@@ -102,10 +102,12 @@ pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use dotenv::dotenv;
     use juniper::{EmptyMutation, Variables};
 
     #[test]
     fn test_roll_query() {
+        dotenv().ok();
         // Create a context object.
         let ctx = State::default();
 
@@ -135,6 +137,7 @@ mod tests {
 
     #[test]
     fn test_roll_query_error() {
+        dotenv().ok();
         // Create a context object.
         let ctx = State::default();
 

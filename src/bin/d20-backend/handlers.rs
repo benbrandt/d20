@@ -4,7 +4,7 @@ use r2d2_redis::redis::Commands;
 use serde::Deserialize;
 use std::collections::HashMap;
 use tide::{
-    error::{ResultExt},
+    error::ResultExt,
     querystring::ContextExt,
     response::{self, IntoResponse},
     Context, EndpointResult,
@@ -24,7 +24,7 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
         *stats.entry(roll).or_insert(0) += 1;
     }
     for (roll, count) in &stats {
-        conn.incr(format!("{}:{}", die, roll), *count)?;
+        conn.incr(format!("roll_stat:{}:{}", die, roll), *count)?;
     }
     Ok(())
 }
@@ -32,7 +32,9 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
 fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResult {
     let die = instruction.die;
     let result = dice_roller::roll(instruction).map_err(|e| e.into_response())?;
-    roll_stats(state, die, &result.rolls).map_err(|e| e.compat()).server_err()?;
+    roll_stats(state, die, &result.rolls)
+        .map_err(|e| e.compat())
+        .server_err()?;
     Ok(response::json(result))
 }
 

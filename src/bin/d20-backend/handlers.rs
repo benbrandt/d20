@@ -4,7 +4,7 @@ use r2d2_redis::redis::Commands;
 use serde::Deserialize;
 use std::collections::HashMap;
 use tide::{
-    error::ResultExt,
+    error::{ResultExt},
     querystring::ContextExt,
     response::{self, IntoResponse},
     Context, EndpointResult,
@@ -15,20 +15,24 @@ pub struct RollQuery {
     roll: String,
 }
 
-fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResult {
-    let die = instruction.die;
-    let result = dice_roller::roll(instruction).map_err(|e| e.into_response())?;
-    // Log stats to redis
+/// Log stats to redis
+pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure::Error> {
     let pool = state.redis.clone();
-    let conn = pool.get().server_err()?;
+    let conn = pool.get()?;
     let mut stats = HashMap::new();
-    for roll in &result.rolls {
+    for roll in rolls {
         *stats.entry(roll).or_insert(0) += 1;
     }
     for (roll, count) in &stats {
-        conn.incr(format!("{}:{}", die, roll), *count)
-            .server_err()?;
+        conn.incr(format!("{}:{}", die, roll), *count)?;
     }
+    Ok(())
+}
+
+fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResult {
+    let die = instruction.die;
+    let result = dice_roller::roll(instruction).map_err(|e| e.into_response())?;
+    roll_stats(state, die, &result.rolls).map_err(|e| e.compat()).server_err()?;
     Ok(response::json(result))
 }
 

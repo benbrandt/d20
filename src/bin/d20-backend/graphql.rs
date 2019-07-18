@@ -1,10 +1,9 @@
 use crate::{
     dice_roller::{self, RollInstruction, RollResult},
+    handlers::roll_stats,
     State,
 };
-use juniper::{http::GraphQLRequest, EmptyMutation, FieldResult};
-use r2d2_redis::redis::Commands;
-use std::collections::HashMap;
+use juniper::{http::GraphQLRequest, EmptyMutation, FieldError, FieldResult};
 use tide::{error::ResultExt, http::StatusCode, response, Context, EndpointResult};
 
 impl juniper::Context for State {}
@@ -30,16 +29,7 @@ impl Query {
     ))]
     fn roll(context: &State, num: i32, die: i32, modifier: i32) -> FieldResult<RollResult> {
         let result = dice_roller::roll(RollInstruction { num, die, modifier })?;
-        // Log stats to redis
-        let pool = context.redis.clone();
-        let conn = pool.get()?;
-        let mut stats = HashMap::new();
-        for roll in &result.rolls {
-            *stats.entry(roll).or_insert(0) += 1;
-        }
-        for (roll, count) in &stats {
-            conn.incr(format!("{}:{}", die, roll), *count)?;
-        }
+        roll_stats(context, die, &result.rolls).map_err(FieldError::from)?;
         Ok(result)
     }
 }

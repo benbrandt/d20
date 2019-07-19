@@ -6,10 +6,19 @@ extern crate diesel;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use r2d2_redis::RedisConnectionManager;
+use sentry::{self, integrations, internals::ClientInitGuard};
 use std::env;
 
 pub mod models;
 pub mod schema;
+
+pub fn sentry_init() -> ClientInitGuard {
+    let guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
+    env::set_var("RUST_BACKTRACE", "1");
+    integrations::env_logger::init(None, Default::default());
+    integrations::panic::register_panic_handler();
+    guard
+}
 
 pub fn db_pool() -> Pool<ConnectionManager<PgConnection>> {
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");

@@ -1,10 +1,9 @@
 #![feature(async_await)]
 #![warn(clippy::all)]
-use d20::redis_pool;
+use d20::{redis_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
 use r2d2_redis::RedisConnectionManager;
-use sentry;
 use std::env;
 use tide::{
     middleware::{CorsMiddleware, RequestLogger},
@@ -34,10 +33,7 @@ impl Default for State {
 fn main() {
     dotenv().ok();
 
-    let _guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
-    env::set_var("RUST_BACKTRACE", "1");
-    sentry::integrations::env_logger::init(None, Default::default());
-    sentry::integrations::panic::register_panic_handler();
+    let _guard = sentry_init();
 
     // Get the port number to listen on.
     let port: i32 = env::var("PORT")

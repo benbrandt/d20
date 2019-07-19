@@ -1,9 +1,10 @@
-use d20::{db_pool, models::RollStat, schema::roll_stats};
+use d20::{db_pool, models::RollStat, schema::roll_stats, sentry_init};
 use diesel::prelude::*;
 use dotenv::dotenv;
 
 fn main() {
     dotenv().ok();
+    let _guard = sentry_init();
     let pool = db_pool();
     let connection = pool.get().unwrap();
     let results = roll_stats::table

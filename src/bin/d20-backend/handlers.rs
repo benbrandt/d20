@@ -23,8 +23,8 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
     for roll in rolls {
         *stats.entry(roll).or_insert(0) += 1;
     }
-    for (roll, count) in &stats {
-        conn.incr(format!("roll_stat:{}:{}", die, roll), *count)?;
+    for (roll, count) in stats {
+        conn.hincr(format!("roll_stat:{}", die), *roll, count)?;
     }
     Ok(())
 }

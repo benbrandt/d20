@@ -1,12 +1,13 @@
 use d20::{db_pool, models::RollStat, schema::roll_stats, sentry_init};
 use diesel::prelude::*;
 use dotenv::dotenv;
+use std::error::Error;
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     dotenv().ok();
     let _guard = sentry_init();
     let pool = db_pool();
-    let connection = pool.get().unwrap();
+    let connection = pool.get()?;
     let results = roll_stats::table
         .load::<RollStat>(&connection)
         .expect("Error loading stats");
@@ -18,4 +19,6 @@ fn main() {
             stat.die, stat.roll, stat.roll_count, stat.updated_at
         );
     }
+
+    Ok(())
 }

@@ -1,6 +1,5 @@
 use http_service::Body;
 use juniper::GraphQLObject;
-use log::info;
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64;
 use regex::Regex;
@@ -102,9 +101,7 @@ pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
 }
 
 fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
-    let roll = rng.gen_range(1, die + 1);
-    info!("Die: {}, Roll: {}", die, roll);
-    roll
+    rng.gen_range(1, die + 1)
 }
 
 pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {

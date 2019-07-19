@@ -1,7 +1,8 @@
+use crate::schema::roll_stats;
 use chrono::NaiveDateTime;
-use diesel::Queryable;
 
-#[derive(Queryable)]
+#[derive(Debug, Identifiable, Queryable)]
+#[primary_key(die, roll)]
 pub struct RollStat {
     pub die: i16,
     pub roll: i16,

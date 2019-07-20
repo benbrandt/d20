@@ -1,5 +1,6 @@
 use crate::dice_roller::{self, RollInstruction};
 use crate::State;
+use d20::REDIS_KEY_ROLL_STATS;
 use r2d2_redis::redis::Commands;
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -24,7 +25,7 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
         *stats.entry(roll).or_insert(0) += 1;
     }
     for (roll, count) in stats {
-        conn.hincr(format!("roll_stat:{}", die), *roll, count)?;
+        conn.hincr(REDIS_KEY_ROLL_STATS, format!("{}:{}", die, roll), count)?;
     }
     Ok(())
 }

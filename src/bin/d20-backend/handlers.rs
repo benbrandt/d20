@@ -18,7 +18,7 @@ pub struct RollQuery {
 /// Log stats to redis
 pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure::Error> {
     let pool = state.redis.clone();
-    let conn = pool.get()?;
+    let mut conn = pool.get()?;
     let mut stats = HashMap::new();
     for roll in rolls {
         *stats.entry(roll).or_insert(0) += 1;

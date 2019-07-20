@@ -14,13 +14,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let d_pool = db_pool();
     let d_conn = d_pool.get()?;
     let r_pool = redis_pool();
-    let r_conn = r_pool.get()?;
+    let mut r_conn = r_pool.get()?;
 
     let keys: Iter<String> = r_conn
         .scan_match("roll_stat:*")
         .expect("Error loading keys");
 
     for key in keys {
+        let mut r_conn = r_pool.get()?;
         let die: i16 = key.split(':').next_back().unwrap().parse()?;
         let entries: Vec<String> = r_conn.hgetall(&key)?;
 

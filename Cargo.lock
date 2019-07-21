@@ -629,7 +629,7 @@ dependencies = [
 [[package]]
 name = "http-service"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/http-service#be5d91f9f360ae9cbf10d182f23c92e5f89034eb"
+source = "git+https://github.com/rustasync/http-service#736be519761f0446d025064cfce845c8e74e1149"
 dependencies = [
  "bytes 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -639,7 +639,7 @@ dependencies = [
 [[package]]
 name = "http-service-hyper"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/http-service#be5d91f9f360ae9cbf10d182f23c92e5f89034eb"
+source = "git+https://github.com/rustasync/http-service#736be519761f0446d025064cfce845c8e74e1149"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",

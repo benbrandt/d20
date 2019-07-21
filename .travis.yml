@@ -56,8 +56,9 @@ jobs:
 
       before_cache:
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
-        - cargo sweep --file
         - ./bin/nightly-cleanup.sh
+        - cargo sweep --file
+        - cargo sweep -i
 
       cache: cargo
 

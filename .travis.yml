@@ -103,4 +103,4 @@ jobs:
       script:
         - cargo test --all
       after_success:
-        - cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo tarpaulin --all --out Xml && bash <(curl -s https://codecov.io/bash)

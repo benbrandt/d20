@@ -54,7 +54,7 @@ jobs:
         - cargo fmt --all -- --check
         - cargo build --all
         - cargo clippy --all-targets --all-features -- -D warnings
-        - cargo test --all && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo test --all && cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
 
       before_cache:
         - rm -rf "$TRAVIS_HOME/.cargo/registry/src"

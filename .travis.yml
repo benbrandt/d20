@@ -89,12 +89,10 @@ jobs:
       services:
         - postgresql
         - redis-server
-
       before_install:
         # Intall cargo tools if not installed
         - diesel --version | grep $(curl 'https://crates.io/api/v1/crates/diesel_cli' | jq '.crate.max_version' | tr -d '"') || cargo install diesel_cli --no-default-features --features=postgres --force
         - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-tarpaulin --force
-
       before_script:
         - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
         - cargo sweep --stamp
@@ -102,6 +100,7 @@ jobs:
         - echo "DATABASE_URL=postgres://postgres@localhost/travis_ci_test" >> .env
         - echo "REDIS_URL=redis://localhost" >> .env
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
-
       script:
-        - cargo test --all && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo test --all && cargo tarpaulin --all --verbose --out Xml
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)

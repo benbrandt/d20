@@ -100,6 +100,6 @@ jobs:
         - echo "REDIS_URL=redis://localhost" >> .env
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
       script:
-        - cargo test --all && cargo tarpaulin --all --verbose --out Xml
+        - cargo test --all
       after_success:
-        - bash <(curl -s https://codecov.io/bash)
+        - cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)

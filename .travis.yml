@@ -1,46 +1,102 @@
 language: rust
 
+# Global settings
 branches:
   only:
     - master
+
+stages:
+  - name: bump nightly
+    if: type = cron
+  - name: test
+    if: type != cron
+
+
+addons:
+  apt:
+    packages:
+      - jq
+      - libssl-dev
+
+cache: cargo
+
+before_script:
+  - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
+  - cargo sweep --stamp
+
+before_cache:
+  - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
+  - ./bin/nightly-cleanup.sh
+  - cargo sweep --file
+  - cargo sweep -i
+
+notifications:
+  email:
+    on_success: always
 
 jobs:
   include:
     # Run on cron to generate a PR
     - stage: bump nightly
-      if: type = cron
-
+      cache: false
       before_script:
         - git config --global user.name "Travis-CI"
         - git config credential.helper "store --file=.git/credentials"
         - echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
-
       script:
         - ./bin/nightly-pr.sh
 
-    # Default tests
     - stage: test
-      if: type != cron
+      name: cargo audit
+      env: [CACHE_NAME=audit]
+      before_install:
+        - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
+      script:
+        # --ignore ref: https://github.com/crossbeam-rs/crossbeam/issues/401
+        # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
+        - cargo audit --ignore RUSTSEC-2019-0011
 
-      addons:
-        apt:
-          packages:
-            - jq
-            - libssl-dev
+    - stage: test
+      name: cargo fmt
+      cache: false
+      before_install:
+        - rustup component add rustfmt
+      before_script: []
+      script:
+        - cargo fmt --all -- --check
 
+    - stage: test
+      name: cargo clippy
+      env: [CACHE_NAME=clippy]
+      before_install:
+        - rustup component add clippy
+      script:
+        - cargo clippy --all-targets --all-features -- -D warnings
+
+    - stage: test
+      name: cargo build
+      env: [CACHE_NAME=build]
+      before_install:
+        # Make sure local dev environment will work as well for nightly toolchains
+        - rustup component add rls
+        - rustup component add rust-analysis
+        - rustup component add rust-src
+      script:
+        - cargo build --all
+
+    - stage: test
+      name: cargo test
       services:
         - postgresql
         - redis-server
 
       before_install:
-        - ./bin/rust-setup.sh
         # Intall cargo tools if not installed
-        - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
         - diesel --version | grep $(curl 'https://crates.io/api/v1/crates/diesel_cli' | jq '.crate.max_version' | tr -d '"') || cargo install diesel_cli --no-default-features --features=postgres --force
-        - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
         - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-tarpaulin --force
 
       before_script:
+        - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
         - cargo sweep --stamp
         - psql -c 'create database travis_ci_test;' -U postgres
         - echo "DATABASE_URL=postgres://postgres@localhost/travis_ci_test" >> .env
@@ -48,22 +104,4 @@ jobs:
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
 
       script:
-        # --ignore ref: https://github.com/crossbeam-rs/crossbeam/issues/401
-        # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
-        - cargo audit --ignore RUSTSEC-2019-0011
-        - cargo fmt --all -- --check
-        - cargo build --all
-        - cargo clippy --all-targets --all-features -- -D warnings
         - cargo test --all && cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
-
-      before_cache:
-        - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
-        - ./bin/nightly-cleanup.sh
-        - cargo sweep --file
-        - cargo sweep -i
-
-      cache: cargo
-
-notifications:
-  email:
-    on_success: always

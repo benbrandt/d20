@@ -104,4 +104,4 @@ jobs:
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
 
       script:
-        - cargo test --all && cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo test --all && cargo tarpaulin --all --verbose --out Xml && bash <(curl -s https://codecov.io/bash)

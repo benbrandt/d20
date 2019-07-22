@@ -58,10 +58,9 @@ jobs:
 
     - stage: test
       name: cargo fmt
-      cache: false
+      env: [CACHE_NAME=fmt]
       before_install:
         - rustup component add rustfmt
-      before_script: []
       script:
         - cargo fmt --all -- --check
 

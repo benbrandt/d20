@@ -12,18 +12,7 @@ stages:
   - name: test
     if: type != cron
 
-
-addons:
-  apt:
-    packages:
-      - jq
-      - libssl-dev
-
 cache: cargo
-
-before_script:
-  - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
-  - cargo sweep --stamp
 
 before_cache:
   - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
@@ -48,59 +37,40 @@ jobs:
         - ./bin/nightly-pr.sh
 
     - stage: test
-      name: cargo audit
-      env: [CACHE_NAME=audit]
-      before_install:
-        - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
-      script:
-        # --ignore ref: https://github.com/crossbeam-rs/crossbeam/issues/401
-        # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
-        - cargo audit --ignore RUSTSEC-2019-0011
-
-    - stage: test
-      name: cargo fmt
-      env: [CACHE_NAME=fmt]
-      before_install:
-        - rustup component add rustfmt
-      script:
-        - cargo fmt --all -- --check
-
-    - stage: test
-      name: cargo clippy
-      env: [CACHE_NAME=clippy]
-      before_install:
-        - rustup component add clippy
-      script:
-        - cargo clippy --all-targets --all-features -- -D warnings
-
-    - stage: test
-      name: cargo build
-      env: [CACHE_NAME=build]
-      before_install:
-        # Make sure local dev environment will work as well for nightly toolchains
-        - rustup component add rls
-        - rustup component add rust-analysis
-        - rustup component add rust-src
-      script:
-        - cargo build --all
-
-    - stage: test
-      name: cargo test
+      addons:
+        apt:
+          packages:
+            - jq
       services:
         - postgresql
         - redis-server
       before_install:
+        - rustup component add clippy
+        - rustup component add rustfmt
+        # Make sure local dev environment will work as well for nightly toolchains
+        - rustup component add rls
+        - rustup component add rust-analysis
+        - rustup component add rust-src
         # Intall cargo tools if not installed
+        - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
         - diesel --version | grep $(curl 'https://crates.io/api/v1/crates/diesel_cli' | jq '.crate.max_version' | tr -d '"') || cargo install diesel_cli --no-default-features --features=postgres --force
         - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-tarpaulin --force
-      before_script:
         - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
+      before_script:
         - cargo sweep --stamp
+        # Setup database
         - psql -c 'create database travis_ci_test;' -U postgres
         - echo "DATABASE_URL=postgres://postgres@localhost/travis_ci_test" >> .env
         - echo "REDIS_URL=redis://localhost" >> .env
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
       script:
+        # --ignore ref: https://github.com/crossbeam-rs/crossbeam/issues/401
+        # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
+        - cargo audit --ignore RUSTSEC-2019-0011
+        - cargo fmt --all -- --check
+        - cargo clippy --all-targets --all-features -- -D warnings
+        - cargo build --all
         - cargo test --all
+
       after_success:
         - cargo tarpaulin --all --out Xml && bash <(curl -s https://codecov.io/bash)

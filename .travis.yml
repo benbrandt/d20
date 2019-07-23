@@ -68,8 +68,8 @@ jobs:
         # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
         - cargo audit --ignore RUSTSEC-2019-0011
         - cargo fmt --all -- --check
-        - cargo clippy --all-targets --all-features -- -D warnings
         - cargo build --all
+        - cargo clippy --all-targets --all-features -- -D warnings
         - cargo test --all
 
       after_success:

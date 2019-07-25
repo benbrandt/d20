@@ -1,7 +1,7 @@
 use crate::dice_roller::{self, RollInstruction};
 use crate::State;
 use d20::REDIS_KEY_ROLL_STATS;
-use r2d2_redis::redis::Commands;
+use r2d2_redis::redis::{pipe, PipelineCommands};
 use serde::Deserialize;
 use std::collections::HashMap;
 use tide::{
@@ -24,9 +24,11 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
     for roll in rolls {
         *stats.entry(roll).or_insert(0) += 1;
     }
+    let mut pipeline = pipe();
     for (roll, count) in stats {
-        conn.hincr(REDIS_KEY_ROLL_STATS, format!("{}:{}", die, roll), count)?;
+        pipeline.hincr(REDIS_KEY_ROLL_STATS, format!("{}:{}", die, roll), count);
     }
+    pipeline.execute(&mut *conn);
     Ok(())
 }
 

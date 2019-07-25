@@ -66,9 +66,9 @@ jobs:
       script:
         - cargo audit
         - cargo fmt --all -- --check
-        - cargo build --all
+        - cargo build
         - cargo clippy --all-targets --all-features -- -D warnings
-        - cargo test --all
+        - cargo test
 
       after_success:
-        - cargo tarpaulin --all --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo tarpaulin --out Xml && bash <(curl -s https://codecov.io/bash)

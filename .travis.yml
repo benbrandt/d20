@@ -64,9 +64,7 @@ jobs:
         - echo "REDIS_URL=redis://localhost" >> .env
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
       script:
-        # --ignore ref: https://github.com/crossbeam-rs/crossbeam/issues/401
-        # hyper/reqwest/tokio -> tokio-threadpool -> crossbeam-deque -> crossbeam-epoch -> memoffset
-        - cargo audit --ignore RUSTSEC-2019-0011
+        - cargo audit
         - cargo fmt --all -- --check
         - cargo build --all
         - cargo clippy --all-targets --all-features -- -D warnings

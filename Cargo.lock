@@ -307,7 +307,7 @@ dependencies = [
  "dotenv 0.14.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.6.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "jsonwebtoken 6.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "juniper 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -628,8 +628,8 @@ dependencies = [
 
 [[package]]
 name = "http-service"
-version = "0.2.0"
-source = "git+https://github.com/rustasync/http-service#736be519761f0446d025064cfce845c8e74e1149"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "bytes 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -638,12 +638,12 @@ dependencies = [
 
 [[package]]
 name = "http-service-hyper"
-version = "0.2.0"
-source = "git+https://github.com/rustasync/http-service#736be519761f0446d025064cfce845c8e74e1149"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "hyper 0.12.33 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -1838,13 +1838,13 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "fnv 1.0.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
- "http-service-hyper 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "http-service-hyper 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "route-recognizer 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "tide-cookies 0.2.0 (git+https://github.com/rustasync/tide)",
  "tide-core 0.2.0 (git+https://github.com/rustasync/tide)",
@@ -1858,37 +1858,37 @@ dependencies = [
 [[package]]
 name = "tide-compression"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "accept-encoding 0.2.0-alpha.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-compression 0.1.0-alpha.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "bytes 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tide 0.2.0 (git+https://github.com/rustasync/tide)",
 ]
 
 [[package]]
 name = "tide-cookies"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "cookie 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tide-core 0.2.0 (git+https://github.com/rustasync/tide)",
 ]
 
 [[package]]
 name = "tide-core"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "route-recognizer 0.1.12 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.98 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.40 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1897,22 +1897,22 @@ dependencies = [
 [[package]]
 name = "tide-cors"
 version = "0.2.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "tide-core 0.2.0 (git+https://github.com/rustasync/tide)",
 ]
 
 [[package]]
 name = "tide-forms"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
- "http-service 0.2.0 (git+https://github.com/rustasync/http-service)",
+ "http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "multipart 0.16.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.98 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1923,7 +1923,7 @@ dependencies = [
 [[package]]
 name = "tide-headers"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1934,7 +1934,7 @@ dependencies = [
 [[package]]
 name = "tide-log"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1945,7 +1945,7 @@ dependencies = [
 [[package]]
 name = "tide-querystring"
 version = "0.1.0"
-source = "git+https://github.com/rustasync/tide#3a7601f8a4e1fd171f26114a51d1e852d088adb7"
+source = "git+https://github.com/rustasync/tide#dfef176a1a0d20a72629bb92bf86820f75ac56e6"
 dependencies = [
  "futures-preview 0.3.0-alpha.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2436,8 +2436,8 @@ dependencies = [
 "checksum hostname 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "21ceb46a83a85e824ef93669c8b390009623863b5c195d1ba747292c0c72f94e"
 "checksum http 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)" = "372bcb56f939e449117fb0869c2e8fd8753a8223d92a172c6e808cf123a5b6e4"
 "checksum http-body 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6741c859c1b2463a423a1dbce98d418e6c3c3fc720fb0d45528657320920292d"
-"checksum http-service 0.2.0 (git+https://github.com/rustasync/http-service)" = "<none>"
-"checksum http-service-hyper 0.2.0 (git+https://github.com/rustasync/http-service)" = "<none>"
+"checksum http-service 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "8dd6a648b7e3e8c4944def8726c73d1c5d02a815d0bc1e4393fcd83a31d385cf"
+"checksum http-service-hyper 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "27ef86efa9e3ac50bcac83108b0ff3abbf037864507b812e7054b8d664a467db"
 "checksum httparse 1.3.4 (registry+https://github.com/rust-lang/crates.io-index)" = "cd179ae861f0c2e53da70d892f5f3029f9594be0c41dc5269cd371691b1dc2f9"
 "checksum httpdate 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "494b4d60369511e7dea41cf646832512a94e542f68bb9c49e54518e0f468eb47"
 "checksum humantime 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3ca7e5f2e110db35f93b837c81797f3714500b81d517bf20c431b16d3ca4f114"

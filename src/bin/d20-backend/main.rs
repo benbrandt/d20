@@ -1,6 +1,6 @@
 #![feature(async_await)]
 #![warn(clippy::all)]
-use d20::{redis_pool, sentry_init};
+use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
 use r2d2_redis::RedisConnectionManager;
@@ -20,12 +20,14 @@ mod handlers;
 #[derive(Clone)]
 pub struct State {
     redis: Pool<RedisConnectionManager>,
+    rng: Pool<RngConnectionManager>,
 }
 
 impl Default for State {
     fn default() -> Self {
         Self {
             redis: redis_pool(),
+            rng: rng_pool(),
         }
     }
 }

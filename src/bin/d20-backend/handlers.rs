@@ -34,7 +34,9 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
 
 fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResult {
     let die = instruction.die;
-    let result = dice_roller::roll(instruction).map_err(|e| e.into_response())?;
+    let pool = state.rng.clone();
+    let mut rng = pool.get().server_err()?;
+    let result = dice_roller::roll(&mut *rng, instruction).map_err(|e| e.into_response())?;
     roll_stats(state, die, &result.rolls)
         .map_err(|e| e.compat())
         .server_err()?;

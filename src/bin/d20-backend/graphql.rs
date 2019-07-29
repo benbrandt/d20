@@ -28,7 +28,9 @@ impl Query {
         modifier(default = 0, description = "Additional modifier to the roll",),
     ))]
     fn roll(context: &State, num: i32, die: i32, modifier: i32) -> FieldResult<RollResult> {
-        let result = dice_roller::roll(RollInstruction { num, die, modifier })?;
+        let pool = context.rng.clone();
+        let mut rng = pool.get()?;
+        let result = dice_roller::roll(&mut *rng, RollInstruction { num, die, modifier })?;
         roll_stats(context, die, &result.rolls)?;
         Ok(result)
     }

@@ -1,7 +1,6 @@
 use http_service::Body;
 use juniper::GraphQLObject;
-use rand::{Rng, SeedableRng};
-use rand_pcg::Pcg64;
+use rand::Rng;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fmt;
@@ -104,8 +103,8 @@ fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
     rng.gen_range(1, die + 1)
 }
 
-pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
-    let mut rng = Pcg64::from_entropy();
+pub fn roll(rng: &mut impl Rng, instruction: RollInstruction) -> Result<RollResult, RollError> {
+    // let mut rng = Pcg64::from_entropy();
     let mut total = 0;
     let mut rolls = Vec::new();
     if !DICE_VALUES.iter().any(|d| d == &instruction.die) {
@@ -131,7 +130,7 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
         });
     }
     for _ in 0..instruction.num {
-        let roll = gen_roll(&mut rng, instruction.die);
+        let roll = gen_roll(rng, instruction.die);
         total += roll;
         rolls.push(roll);
     }
@@ -147,6 +146,8 @@ pub fn roll(instruction: RollInstruction) -> Result<RollResult, RollError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::SeedableRng;
+    use rand_pcg::Pcg64;
     use std::collections::HashMap;
 
     #[test]
@@ -227,11 +228,15 @@ mod tests {
 
     #[test]
     fn test_roll_single_dice() {
-        let roll = roll(RollInstruction {
-            num: 1,
-            die: 8,
-            modifier: 0,
-        })
+        let mut rng = Pcg64::from_entropy();
+        let roll = roll(
+            &mut rng,
+            RollInstruction {
+                num: 1,
+                die: 8,
+                modifier: 0,
+            },
+        )
         .unwrap();
         assert!(roll.total >= 1);
         assert!(roll.total <= 8);
@@ -239,11 +244,15 @@ mod tests {
 
     #[test]
     fn test_roll_multiple_dice() {
-        let roll = roll(RollInstruction {
-            num: 3,
-            die: 6,
-            modifier: 0,
-        })
+        let mut rng = Pcg64::from_entropy();
+        let roll = roll(
+            &mut rng,
+            RollInstruction {
+                num: 3,
+                die: 6,
+                modifier: 0,
+            },
+        )
         .unwrap();
         assert!(roll.total >= 3);
         assert!(roll.total <= 18);
@@ -251,11 +260,15 @@ mod tests {
 
     #[test]
     fn test_roll_multiple_dice_modifier() {
-        let roll = roll(RollInstruction {
-            num: 3,
-            die: 6,
-            modifier: 3,
-        })
+        let mut rng = Pcg64::from_entropy();
+        let roll = roll(
+            &mut rng,
+            RollInstruction {
+                num: 3,
+                die: 6,
+                modifier: 3,
+            },
+        )
         .unwrap();
         assert!(roll.total >= 6);
         assert!(roll.total <= 21);
@@ -264,33 +277,45 @@ mod tests {
     #[test]
     #[should_panic]
     fn test_roll_invalid_dice() {
-        roll(RollInstruction {
-            num: 0,
-            die: 9,
-            modifier: 0,
-        })
+        let mut rng = Pcg64::from_entropy();
+        roll(
+            &mut rng,
+            RollInstruction {
+                num: 0,
+                die: 9,
+                modifier: 0,
+            },
+        )
         .unwrap();
     }
 
     #[test]
     #[should_panic]
     fn test_roll_too_few() {
-        roll(RollInstruction {
-            num: 0,
-            die: 8,
-            modifier: 0,
-        })
+        let mut rng = Pcg64::from_entropy();
+        roll(
+            &mut rng,
+            RollInstruction {
+                num: 0,
+                die: 8,
+                modifier: 0,
+            },
+        )
         .unwrap();
     }
 
     #[test]
     #[should_panic]
     fn test_roll_too_many() {
-        roll(RollInstruction {
-            num: 100,
-            die: 8,
-            modifier: 0,
-        })
+        let mut rng = Pcg64::from_entropy();
+        roll(
+            &mut rng,
+            RollInstruction {
+                num: 100,
+                die: 8,
+                modifier: 0,
+            },
+        )
         .unwrap();
     }
 }

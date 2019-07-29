@@ -6,10 +6,12 @@ extern crate diesel;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool};
 use r2d2_redis::RedisConnectionManager;
+use r2d2_rng::RngConnectionManager;
 use sentry::{self, integrations, internals::ClientInitGuard};
 use std::env;
 
 pub mod models;
+pub mod r2d2_rng;
 pub mod schema;
 
 pub const REDIS_KEY_ROLL_STATS: &str = "roll_stats";
@@ -40,4 +42,12 @@ pub fn redis_pool() -> Pool<RedisConnectionManager> {
         .min_idle(Some(1))
         .build(manager)
         .unwrap_or_else(|_| panic!("Error connecting to {}", redis_url))
+}
+
+pub fn rng_pool() -> Pool<RngConnectionManager> {
+    let manager = RngConnectionManager::new();
+    Pool::builder()
+        .min_idle(Some(1))
+        .build(manager)
+        .unwrap_or_else(|_| panic!("Error creating rngs"))
 }

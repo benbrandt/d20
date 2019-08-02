@@ -1,5 +1,5 @@
 language: rust
-dist: xenial
+dist: bionic
 
 # Global settings
 branches:
@@ -16,9 +16,8 @@ cache: cargo
 
 before_cache:
   - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
+  - rm -rf target
   - ./bin/nightly-cleanup.sh
-  - cargo sweep --file
-  - cargo sweep -i
 
 notifications:
   email:
@@ -45,6 +44,7 @@ jobs:
         - postgresql
         - redis-server
       before_install:
+        - curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
         - rustup component add clippy
         - rustup component add rustfmt
         # Make sure local dev environment will work as well for nightly toolchains
@@ -54,21 +54,21 @@ jobs:
         # Intall cargo tools if not installed
         - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
         - diesel --version | grep $(curl 'https://crates.io/api/v1/crates/diesel_cli' | jq '.crate.max_version' | tr -d '"') || cargo install diesel_cli --no-default-features --features=postgres --force
-        - cargo tarpaulin --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-tarpaulin' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-tarpaulin --force
-        - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
       before_script:
-        - cargo sweep --stamp
         # Setup database
         - psql -c 'create database travis_ci_test;' -U postgres
         - echo "DATABASE_URL=postgres://postgres@localhost/travis_ci_test" >> .env
         - echo "REDIS_URL=redis://localhost" >> .env
         - diesel database setup --database-url=postgres://postgres@localhost/travis_ci_test
       script:
+        - export CARGO_INCREMENTAL=0
+        - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
         - cargo audit
         - cargo fmt --all -- --check
-        - cargo build
+        - cargo build --verbose
         - cargo clippy --all-targets --all-features -- -D warnings
-        - cargo test
-
-      after_success:
-        - cargo tarpaulin --out Xml && bash <(curl -s https://codecov.io/bash)
+        - cargo test --verbose
+        - |
+          zip -0 ccov.zip `find . \( -name "d20*.gc*" \) -print`;
+          ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;
+          bash <(curl -s https://codecov.io/bash) -f lcov.info;

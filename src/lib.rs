@@ -1,4 +1,4 @@
-#![warn(clippy::all)]
+#![warn(clippy::all, clippy::nursery, clippy::pedantic)]
 
 #[macro_use]
 extern crate diesel;
@@ -19,7 +19,7 @@ pub const REDIS_KEY_ROLL_STATS: &str = "roll_stats";
 pub fn sentry_init() -> ClientInitGuard {
     let guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
     env::set_var("RUST_BACKTRACE", "1");
-    integrations::env_logger::init(None, Default::default());
+    integrations::env_logger::init(None, integrations::log::LoggerOptions::default());
     integrations::panic::register_panic_handler();
     guard
 }

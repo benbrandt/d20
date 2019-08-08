@@ -51,7 +51,7 @@ type Schema = juniper::RootNode<'static, Query, EmptyMutation<State>>;
 
 // Finally, we'll bridge between Tide and Juniper. `GraphQLRequest` from Juniper implements
 // `Deserialize`, so we use `Json` extractor to deserialize the request body.
-pub async fn handle_graphql(mut cx: Context<State>) -> EndpointResult {
+pub async fn handle_query(mut cx: Context<State>) -> EndpointResult {
     let query: GraphQLRequest = cx.body_json().await.client_err()?;
     let schema = Schema::new(Query, EmptyMutation::new());
     let response = query.execute(&schema, cx.state());
@@ -84,7 +84,7 @@ pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
     // Run the built-in introspection query.
     let (res, _errors) = introspect(
         &Schema::new(Query, EmptyMutation::new()),
-        &cx.state(),
+        cx.state(),
         IntrospectionFormat::default(),
     )
     .unwrap();

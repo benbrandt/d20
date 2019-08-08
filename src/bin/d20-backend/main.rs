@@ -1,5 +1,5 @@
+#![warn(clippy::all, clippy::nursery, clippy::pedantic)]
 #![feature(async_await)]
-#![warn(clippy::all)]
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
@@ -51,7 +51,7 @@ fn main() {
         .middleware(Compression::new())
         .middleware(Decompression::new());
 
-    app.at("/graphql").post(graphql::handle_graphql);
+    app.at("/graphql").post(graphql::handle_query);
     #[cfg(debug_assertions)]
     app.at("/graphiql").get(graphql::handle_graphiql);
     #[cfg(debug_assertions)]

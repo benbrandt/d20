@@ -6,7 +6,7 @@ use rand_pcg::Pcg64;
 pub struct RngConnectionManager;
 
 impl RngConnectionManager {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self
     }
 }

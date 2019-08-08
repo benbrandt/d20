@@ -20,12 +20,12 @@ pub struct RollQuery {
 pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure::Error> {
     let pool = state.redis.clone();
     let mut conn = pool.get()?;
-    let mut stats = HashMap::new();
+    let mut stat_map = HashMap::new();
     for roll in rolls {
-        *stats.entry(roll).or_insert(0) += 1;
+        *stat_map.entry(roll).or_insert(0) += 1;
     }
     let mut pipeline = pipe();
-    for (roll, count) in stats {
+    for (roll, count) in stat_map {
         pipeline.hincr(REDIS_KEY_ROLL_STATS, format!("{}:{}", die, roll), count);
     }
     pipeline.execute(&mut *conn);
@@ -36,9 +36,9 @@ fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResu
     let die = instruction.die;
     let pool = state.rng.clone();
     let mut rng = pool.get().server_err()?;
-    let result = dice_roller::roll(&mut *rng, instruction).map_err(|e| e.into_response())?;
+    let result = dice_roller::roll(&mut *rng, instruction).map_err(IntoResponse::into_response)?;
     roll_stats(state, die, &result.rolls)
-        .map_err(|e| e.compat())
+        .map_err(failure::Error::compat)
         .server_err()?;
     Ok(response::json(result))
 }

@@ -210,7 +210,7 @@ mod tests {
     fn test_gen_roll() {
         let mut rng = rand::thread_rng();
 
-        for d in DICE_VALUES.iter() {
+        for d in &DICE_VALUES {
             let mut occurrences: HashMap<i32, i32> = HashMap::new();
             // Try and get a sample that will have an occurrence for every value
             for _ in 0..d * d {

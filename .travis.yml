@@ -66,7 +66,7 @@ jobs:
         # - cargo audit
         - cargo fmt --all -- --check
         - cargo build
-        - cargo clippy --all-targets --all-features -- -D warnings
+        - cargo clippy --all-targets -- -D warnings
         - cargo test
         - |
           zip -0 ccov.zip `find . \( -name "d20*.gc*" \) -print`;

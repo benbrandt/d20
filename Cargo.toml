@@ -29,3 +29,7 @@ serde_derive = "1"
 serde_json = "1"
 tide = { git = "https://github.com/rustasync/tide" }
 tide-compression = { git = "https://github.com/rustasync/tide" }
+
+[patch.crates-io.route-recognizer]
+git = "https://github.com/miller-time/route-recognizer.rs"
+rev = "d7bc06d2dc58a2c59d8f2cfbee2ab23b8188700d"

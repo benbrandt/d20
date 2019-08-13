@@ -15,8 +15,9 @@ cache: cargo
 
 before_cache:
   - rm -rf "$TRAVIS_HOME/.cargo/registry/src"
-  - rm -rf target
   - ./bin/nightly-cleanup.sh
+  - cargo sweep --file
+  - cargo sweep -i
 
 notifications:
   email:
@@ -51,9 +52,11 @@ jobs:
         - rustup component add rust-analysis
         - rustup component add rust-src
         # Intall cargo tools if not installed
-        # - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
+        - cargo audit --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-audit' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-audit --force
         - diesel --version | grep $(curl 'https://crates.io/api/v1/crates/diesel_cli' | jq '.crate.max_version' | tr -d '"') || cargo install diesel_cli --no-default-features --features=postgres --force
+        - cargo-sweep --version | grep $(curl 'https://crates.io/api/v1/crates/cargo-sweep' | jq '.crate.max_version' | tr -d '"') || cargo install cargo-sweep --force
       before_script:
+        - cargo sweep --stamp
         # Setup database
         - psql -c 'create database travis_ci_test;' -U postgres
         - echo "DATABASE_URL=postgres://postgres@localhost/travis_ci_test" >> .env
@@ -62,7 +65,7 @@ jobs:
       script:
         - export CARGO_INCREMENTAL=0
         - export RUSTFLAGS="-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-        # - cargo audit
+        - cargo audit
         - cargo fmt --all -- --check
         - cargo build
         - cargo clippy --all-targets -- -D warnings

@@ -70,6 +70,7 @@ jobs:
         - cargo build
         - cargo clippy --all-targets -- -D warnings
         - cargo test
+      after_success:
         - |
           zip -0 ccov.zip `find . \( -name "d20*.gc*" \) -print`;
           ./grcov ccov.zip -s . -t lcov --llvm --branch --ignore-not-existing --ignore-dir "/*" -o lcov.info;

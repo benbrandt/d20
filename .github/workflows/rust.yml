@@ -1,0 +1,60 @@
+name: Rust
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+        - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:latest
+        ports:
+        - 6379/tcp
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Setup
+      run: |
+        curl -L https://github.com/mozilla/grcov/releases/latest/download/grcov-linux-x86_64.tar.bz2 | tar jxf -
+        rustup component add clippy
+        rustup component add rustfmt
+        # Make sure local dev environment will work as well for nightly toolchains
+        rustup component add rls
+        rustup component add rust-analysis
+        rustup component add rust-src
+    
+    - name: Format
+      run: cargo fmt --all -- --check
+      
+    - name: Build
+      run: cargo build
+      env:
+        CARGO_INCREMENTAL: 0
+        RUST_FLAGS: -Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads
+        
+    - name: Lint
+      run: cargo clippy --all-targets -- -D warnings
+      env:
+        CARGO_INCREMENTAL: 0
+        RUST_FLAGS: -Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads
+        
+    - name: Run tests
+      run: cargo test
+      env:
+        CARGO_INCREMENTAL: 0
+        RUST_FLAGS: -Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads
+        DATABASE_URL: postgres://postgres@localhost/postgres
+        REDIS_URL: redis://localhost

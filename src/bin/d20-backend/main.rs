@@ -1,5 +1,4 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
-#![feature(async_await)]
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;

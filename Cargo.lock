@@ -1639,7 +1639,7 @@ dependencies = [
 
 [[package]]
 name = "serde_qs"
-version = "0.5.0"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "data-encoding 2.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1881,7 +1881,7 @@ dependencies = [
  "http 0.1.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde_qs 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_qs 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "tide-core 0.2.0 (git+https://github.com/rustasync/tide)",
 ]
 
@@ -2479,7 +2479,7 @@ dependencies = [
 "checksum serde 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)" = "0c4b39bd9b0b087684013a792c59e3e07a46a01d2322518d8a1104641a0b1be0"
 "checksum serde_derive 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)" = "ca13fc1a832f793322228923fbb3aba9f3f44444898f835d31ad1b74fa0a2bf8"
 "checksum serde_json 1.0.41 (registry+https://github.com/rust-lang/crates.io-index)" = "2f72eb2a68a7dc3f9a691bfda9305a1c017a6215e5a4545c258500d2099a37c2"
-"checksum serde_qs 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7b232c387059b62b17eb0487bf23de3ddf21b648ad2206fadc6ff3af9e2f3c07"
+"checksum serde_qs 0.5.1 (registry+https://github.com/rust-lang/crates.io-index)" = "36278a86e341c46a42b0413ac3aa781902af93f5f4b10af098c704f4b96d81d8"
 "checksum serde_urlencoded 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)" = "642dd69105886af2efd227f75a520ec9b44a820d65bc133a9131f7d229fd165a"
 "checksum serde_urlencoded 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)" = "9ec5d77e2d4c73717816afac02670d5c4f534ea95ed430442cad02e7a6e32c97"
 "checksum sha1 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)" = "2579985fda508104f7587689507983eadd6a6e84dd35d6d115361f530916fa0d"

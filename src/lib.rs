@@ -24,6 +24,7 @@ pub fn sentry_init() -> ClientInitGuard {
     guard
 }
 
+#[must_use]
 pub fn db_pool() -> Pool<ConnectionManager<PgConnection>> {
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let manager = ConnectionManager::new(&database_url);
@@ -34,6 +35,7 @@ pub fn db_pool() -> Pool<ConnectionManager<PgConnection>> {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
+#[must_use]
 pub fn redis_pool() -> Pool<RedisConnectionManager> {
     let redis_url = env::var("REDIS_URL").expect("REDIS_URL must be set");
     let manager = RedisConnectionManager::new(&*redis_url).unwrap();
@@ -44,6 +46,7 @@ pub fn redis_pool() -> Pool<RedisConnectionManager> {
         .unwrap_or_else(|_| panic!("Error connecting to {}", redis_url))
 }
 
+#[must_use]
 pub fn rng_pool() -> Pool<RngConnectionManager> {
     let manager = RngConnectionManager::new();
     Pool::builder()

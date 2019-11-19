@@ -5,10 +5,9 @@ use dotenv::dotenv;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
 use tide::{
-    middleware::{CorsMiddleware, RequestLogger},
+    middleware::{Compression, Cors, Decompression, RequestLogger},
     App,
 };
-use tide_compression::{Compression, Decompression};
 
 mod dice_roller;
 mod graphql;
@@ -46,7 +45,7 @@ fn main() {
     let mut app = App::with_state(State::default());
 
     app.middleware(RequestLogger::new())
-        .middleware(CorsMiddleware::new())
+        .middleware(Cors::new())
         .middleware(Compression::new())
         .middleware(Decompression::new());
 

@@ -4,7 +4,7 @@ use crate::{
     State,
 };
 use juniper::{http::GraphQLRequest, EmptyMutation, FieldResult};
-use tide::{error::ResultExt, http::StatusCode, response, Context, EndpointResult};
+use tide::{http::StatusCode, Request, Response};
 
 impl juniper::Context for State {}
 
@@ -31,7 +31,7 @@ impl Query {
         let pool = context.rng.clone();
         let mut rng = pool.get()?;
         let result = dice_roller::roll(&mut *rng, RollInstruction { num, die, modifier })?;
-        roll_stats(context, die, &result.rolls)?;
+        roll_stats(context, die, &result.rolls);
         Ok(result)
     }
 }
@@ -51,8 +51,8 @@ type Schema = juniper::RootNode<'static, Query, EmptyMutation<State>>;
 
 // Finally, we'll bridge between Tide and Juniper. `GraphQLRequest` from Juniper implements
 // `Deserialize`, so we use `Json` extractor to deserialize the request body.
-pub async fn handle_query(mut cx: Context<State>) -> EndpointResult {
-    let query: GraphQLRequest = cx.body_json().await.client_err()?;
+pub async fn handle_query(mut cx: Request<State>) -> Response {
+    let query: GraphQLRequest = cx.body_json().await.unwrap();
     let schema = Schema::new(Query, EmptyMutation::new());
     let response = query.execute(&schema, cx.state());
     let status = if response.is_ok() {
@@ -60,26 +60,22 @@ pub async fn handle_query(mut cx: Context<State>) -> EndpointResult {
     } else {
         StatusCode::BAD_REQUEST
     };
-    let mut resp = response::json(response);
-    *resp.status_mut() = status;
-    Ok(resp)
+    Response::new(status.into()).body_json(&response).unwrap()
 }
 
-#[cfg(debug_assertions)]
-pub async fn handle_graphiql(_: Context<State>) -> EndpointResult {
-    use http_service::Body;
-    use juniper::graphiql::graphiql_source;
-    use tide::http::{header, Response};
+// #[cfg(debug_assertions)]
+// pub async fn handle_graphiql(_: Request<State>) -> Result {
+//     use juniper::graphiql::graphiql_source;
+//     use tide::http::{header, Response};
 
-    Ok(Response::builder()
-        .status(StatusCode::OK)
-        .header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
-        .body(Body::from(graphiql_source("/graphql")))
-        .expect("failed to build graphiql"))
-}
+//     Ok(Response::new(StatusCode::OK.into())
+//         .body_string(graphiql_source("/graphql"))
+//         .set_header(header::CONTENT_TYPE, mime::TEXT_HTML.as_ref())
+//         .expect("failed to build graphiql"))
+// }
 
 #[cfg(debug_assertions)]
-pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
+pub async fn handle_schema(cx: Request<State>) -> Response {
     use juniper::{introspect, IntrospectionFormat};
     // Run the built-in introspection query.
     let (res, _errors) = introspect(
@@ -88,7 +84,9 @@ pub async fn handle_schema(cx: Context<State>) -> EndpointResult {
         IntrospectionFormat::default(),
     )
     .unwrap();
-    Ok(response::json(res))
+    Response::new(StatusCode::OK.into())
+        .body_json(&res)
+        .unwrap()
 }
 
 #[cfg(test)]

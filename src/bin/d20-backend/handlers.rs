@@ -4,12 +4,7 @@ use d20::REDIS_KEY_ROLL_STATS;
 use r2d2_redis::redis::{pipe, PipelineCommands};
 use serde::Deserialize;
 use std::collections::HashMap;
-use tide::{
-    error::ResultExt,
-    querystring::ContextExt,
-    response::{self, IntoResponse},
-    Context, EndpointResult,
-};
+use tide::{http::StatusCode, Request, Response, ResultExt};
 
 #[derive(Deserialize)]
 pub struct RollQuery {
@@ -17,9 +12,9 @@ pub struct RollQuery {
 }
 
 /// Log stats to redis
-pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure::Error> {
+pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) {
     let pool = state.redis.clone();
-    let mut conn = pool.get()?;
+    let mut conn = pool.get().unwrap();
     let mut stat_map = HashMap::new();
     for roll in rolls {
         *stat_map.entry(roll).or_insert(0) += 1;
@@ -29,31 +24,26 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) -> Result<(), failure:
         pipeline.hincr(REDIS_KEY_ROLL_STATS, format!("{}:{}", die, roll), count);
     }
     pipeline.execute(&mut *conn);
-    Ok(())
 }
 
-fn roll_to_response(state: &State, instruction: RollInstruction) -> EndpointResult {
+fn roll_to_response(state: &State, instruction: RollInstruction) -> Response {
     let die = instruction.die;
     let pool = state.rng.clone();
-    let mut rng = pool.get().server_err()?;
-    let result = dice_roller::roll(&mut *rng, instruction).map_err(IntoResponse::into_response)?;
-    roll_stats(state, die, &result.rolls)
-        .map_err(failure::Error::compat)
-        .server_err()?;
-    Ok(response::json(result))
+    let mut rng = pool.get().server_err().unwrap();
+    let result = dice_roller::roll(&mut *rng, instruction).unwrap();
+    roll_stats(state, die, &result.rolls);
+    Response::new(StatusCode::OK.into())
+        .body_json(&result)
+        .unwrap()
 }
 
-pub async fn parse_roll(cx: Context<State>) -> EndpointResult {
-    let query: RollQuery = cx.url_query()?;
-    let parse_result: EndpointResult<RollInstruction> =
-        dice_roller::parse_roll(&query.roll).map_err(|e| e.into_response().into());
-    match parse_result {
-        Ok(instruction) => roll_to_response(cx.state(), instruction),
-        Err(e) => Err(e.into_response().into()),
-    }
+pub async fn parse_roll(cx: Request<State>) -> Response {
+    let query: RollQuery = cx.query().unwrap();
+    let instruction = dice_roller::parse_roll(&query.roll).unwrap();
+    roll_to_response(cx.state(), instruction)
 }
 
-pub async fn roll(mut cx: Context<State>) -> EndpointResult {
-    let body = cx.body_json().await.client_err()?;
+pub async fn roll(mut cx: Request<State>) -> Response {
+    let body = cx.body_json().await.unwrap();
     roll_to_response(cx.state(), body)
 }

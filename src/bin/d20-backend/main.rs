@@ -8,7 +8,6 @@ use std::env;
 use tide::Server;
 
 mod dice_roller;
-mod graphql;
 mod handlers;
 
 // First, we define `State` that holds accumulator state. This is accessible as state in
@@ -46,12 +45,6 @@ fn main() -> Result<(), std::io::Error> {
         //     .middleware(Cors::new())
         //     .middleware(Compression::new())
         //     .middleware(Decompression::new());
-
-        app.at("/graphql").post(graphql::handle_query);
-        // #[cfg(debug_assertions)]
-        // app.at("/graphiql").get(graphql::handle_graphiql);
-        #[cfg(debug_assertions)]
-        app.at("/schema").get(graphql::handle_schema);
 
         app.at("/roll/")
             .get(handlers::parse_roll)

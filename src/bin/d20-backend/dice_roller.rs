@@ -1,5 +1,4 @@
 use http_service::Body;
-use juniper::GraphQLObject;
 use rand::Rng;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
@@ -9,7 +8,7 @@ use tide::{http::status::StatusCode, IntoResponse, Response};
 // All the possible D&D dice
 const DICE_VALUES: [i32; 7] = [4, 6, 8, 10, 12, 20, 100];
 
-#[derive(Debug, Deserialize, GraphQLObject, PartialEq, Serialize)]
+#[derive(Debug, Deserialize, PartialEq, Serialize)]
 /// Instructions for a roll
 pub struct RollInstruction {
     /// Number of dice to roll
@@ -60,7 +59,7 @@ impl IntoResponse for RollError {
     }
 }
 
-#[derive(Serialize, Debug, GraphQLObject)]
+#[derive(Serialize, Debug)]
 /// Result of a roll
 pub struct RollResult {
     /// The instruction passed in to roll the dice

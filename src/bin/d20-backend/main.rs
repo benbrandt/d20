@@ -5,10 +5,7 @@ use dotenv::dotenv;
 use futures::executor::block_on;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
-use tide::{
-    // middleware::{Compression, Cors, Decompression, RequestLogger},
-    Server,
-};
+use tide::Server;
 
 mod dice_roller;
 mod graphql;

@@ -2,15 +2,12 @@
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
+use futures::executor::block_on;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
-use tide::{
-    middleware::{Compression, Cors, Decompression, RequestLogger},
-    App,
-};
+use tide::{middleware::RequestLogger, Server};
 
 mod dice_roller;
-mod graphql;
 mod handlers;
 
 // First, we define `State` that holds accumulator state. This is accessible as state in
@@ -30,7 +27,7 @@ impl Default for State {
     }
 }
 
-fn main() {
+fn main() -> Result<(), std::io::Error> {
     dotenv().ok();
 
     let _guard = sentry_init();
@@ -40,24 +37,20 @@ fn main() {
         .unwrap_or_else(|_| "3000".to_string())
         .parse()
         .expect("PORT must be a number");
+    block_on(async {
+        // Start a server, configuring the resources to serve.
+        let mut app = Server::with_state(State::default());
 
-    // Start a server, configuring the resources to serve.
-    let mut app = App::with_state(State::default());
+        app.middleware(RequestLogger::new());
+        //     .middleware(Cors::new())
+        //     .middleware(Compression::new())
+        //     .middleware(Decompression::new());
 
-    app.middleware(RequestLogger::new())
-        .middleware(Cors::new())
-        .middleware(Compression::new())
-        .middleware(Decompression::new());
+        app.at("/roll/")
+            .get(handlers::parse_roll)
+            .post(handlers::roll);
 
-    app.at("/graphql").post(graphql::handle_query);
-    #[cfg(debug_assertions)]
-    app.at("/graphiql").get(graphql::handle_graphiql);
-    #[cfg(debug_assertions)]
-    app.at("/schema").get(graphql::handle_schema);
-
-    app.at("/roll/")
-        .get(handlers::parse_roll)
-        .post(handlers::roll);
-
-    app.run(format!("0.0.0.0:{}", port)).unwrap();
+        app.listen(format!("0.0.0.0:{}", port)).await?;
+        Ok(())
+    })
 }

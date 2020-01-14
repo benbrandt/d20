@@ -1152,9 +1152,9 @@ dependencies = [
 
 [[package]]
 name = "once_cell"
-version = "1.2.0"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "891f486f630e5c5a4916c7e16c4b24a53e78c860b646e9f8e005e4f16847bfed"
+checksum = "f5941ec2d5ee5916c709580d71553b81a633df245bcc73c04dcbd62152ceefc4"
 
 [[package]]
 name = "openssl"

@@ -35,6 +35,7 @@ impl fmt::Display for RollInstruction {
 }
 
 impl From<RollInstruction> for String {
+    #[must_use]
     fn from(instruction: RollInstruction) -> Self {
         format!("{}", instruction)
     }

@@ -6,8 +6,6 @@ branches:
     - master
 
 stages:
-  - name: bump nightly
-    if: type = cron
   - name: test
     if: type != cron
 
@@ -25,16 +23,6 @@ notifications:
 
 jobs:
   include:
-    # Run on cron to generate a PR
-    - stage: bump nightly
-      cache: false
-      before_script:
-        - git config --global user.name "Travis-CI"
-        - git config credential.helper "store --file=.git/credentials"
-        - echo "https://${GITHUB_TOKEN}:@github.com" > .git/credentials
-      script:
-        - ./bin/nightly-pr.sh
-
     - stage: test
       addons:
         apt:

@@ -5,7 +5,10 @@ use dotenv::dotenv;
 use futures::executor::block_on;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
-use tide::{middleware::RequestLogger, Server};
+use tide::{
+    middleware::{Cors, RequestLogger},
+    Server,
+};
 
 mod dice_roller;
 mod handlers;
@@ -19,6 +22,7 @@ pub struct State {
 }
 
 impl Default for State {
+    #[must_use]
     fn default() -> Self {
         Self {
             redis: redis_pool(),
@@ -41,8 +45,7 @@ fn main() -> Result<(), std::io::Error> {
         // Start a server, configuring the resources to serve.
         let mut app = Server::with_state(State::default());
 
-        app.middleware(RequestLogger::new());
-        //     .middleware(Cors::new())
+        app.middleware(RequestLogger::new()).middleware(Cors::new());
         //     .middleware(Compression::new())
         //     .middleware(Decompression::new());
 

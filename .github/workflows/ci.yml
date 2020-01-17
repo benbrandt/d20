@@ -49,8 +49,9 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           override: true
-          profile: complete # verify ide works
+          profile: default
           toolchain: nightly
+          components: rls, rust-analysis, rust-src # verify ide will work
 
       - name: Install diesel cli
         uses: actions-rs/cargo@v1

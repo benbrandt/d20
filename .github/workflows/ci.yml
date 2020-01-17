@@ -45,6 +45,8 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
 
+      - run: sudo apt-get install libpq-dev openssl postgresql
+
       - name: Install diesel cli
         uses: actions-rs/cargo@v1
         with:
@@ -53,7 +55,6 @@ jobs:
 
       - name: Setup db
         run: |
-          sudo apt-get install libpq-dev openssl postgresql
           psql -h localhost -p $DATABASE_PORT -c 'create database test;' -U postgres
           diesel database setup --database-url=$DATABASE_URL
         env:

@@ -48,7 +48,7 @@ jobs:
       - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
-          override: true
+          default: true
           profile: default
           toolchain: nightly
           components: rls, rust-analysis, rust-src # verify ide will work

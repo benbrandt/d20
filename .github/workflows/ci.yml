@@ -48,7 +48,7 @@ jobs:
       - name: Install nightly toolchain
         uses: actions-rs/toolchain@v1
         with:
-          default: true
+          override: true
           profile: default
           toolchain: nightly
           components: rls, rust-analysis, rust-src # verify ide will work
@@ -56,7 +56,8 @@ jobs:
       - name: Install diesel cli
         uses: actions-rs/cargo@v1
         with:
-          command: install diesel_cli --no-default-features --features=postgres
+          command: install
+          args: diesel_cli --no-default-features --features=postgres
 
       - name: Setup db
         run: |

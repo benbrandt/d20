@@ -53,6 +53,7 @@ jobs:
 
       - name: Setup db
         run: |
+          sudo apt-get install libpq-dev postgresql-client
           psql -h localhost -p $DATABASE_PORT -c 'create database test;' -U postgres
           diesel database setup --database-url=$DATABASE_URL
         env:

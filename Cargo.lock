@@ -1919,7 +1919,7 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.5.1"
-source = "git+https://github.com/http-rs/tide#f825e0526bc241cdd07209b7bae4a2fbaacdc3ad"
+source = "git+https://github.com/http-rs/tide#e9130e510b786d7d8e2f67049f2e1930edc11a38"
 dependencies = [
  "async-std",
  "futures 0.3.1",

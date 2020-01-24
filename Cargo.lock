@@ -49,9 +49,9 @@ dependencies = [
 
 [[package]]
 name = "async-task"
-version = "1.2.1"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9f534e76ca33eaa82bc8da5adb1b9e94a16f6fa217b78e9b400094dbbf844f9"
+checksum = "f20c6fda19d0fc02406779587ca4f9a4171cd32e4a5bda0bd016f0a1334c8d4a"
 dependencies = [
  "libc",
  "winapi 0.3.8",

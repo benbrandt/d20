@@ -1993,7 +1993,7 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.6.0"
-source = "git+https://github.com/http-rs/tide#b42911006c75d6162b944745d400c75524240874"
+source = "git+https://github.com/http-rs/tide#dd9d42d4c8e01299a1c7f69e0f56b8f06cc47b8f"
 dependencies = [
  "async-std",
  "cookie",

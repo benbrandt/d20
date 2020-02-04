@@ -357,7 +357,7 @@ dependencies = [
  "dotenv",
  "env_logger 0.7.1",
  "failure",
- "futures 0.3.1",
+ "futures 0.3.2",
  "http-service",
  "jsonwebtoken",
  "log",
@@ -574,9 +574,9 @@ checksum = "1b980f2816d6ee8673b6517b52cb0e808a180efc92e5c19d02cdda79066703ef"
 
 [[package]]
 name = "futures"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b6f16056ecbb57525ff698bb955162d0cd03bee84e6241c27ff75c08d8ca5987"
+checksum = "dda826c2f9351e68bc87b9037d91d818f24384993ecbb37f711e1f71a83182b5"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -631,9 +631,9 @@ dependencies = [
 
 [[package]]
 name = "futures-executor"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e274736563f686a837a0568b478bdabfeaec2dca794b5649b04e2fe1627c231"
+checksum = "f085a4c6508baef1f70ec2e0232a09edc649a3b86551fe92555e3a9e43939e4c"
 dependencies = [
  "futures-core",
  "futures-task",
@@ -642,9 +642,9 @@ dependencies = [
 
 [[package]]
 name = "futures-io"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e676577d229e70952ab25f3945795ba5b16d63ca794ca9d2c860e5595d20b5ff"
+checksum = "c0ff098c09c30cc42b88a67d9fb27435e8456fb8b2483c904340ed499736931c"
 
 [[package]]
 name = "futures-macro"
@@ -684,9 +684,9 @@ checksum = "a1de7508b218029b0f01662ed8f61b1c964b3ae99d6f25462d0f55a595109df6"
 
 [[package]]
 name = "futures-util"
-version = "0.3.1"
+version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0d66274fb76985d3c62c886d1da7ac4c0903a8c9f754e8fe0f35a6a6cc39e76"
+checksum = "2c3f8c59707f898b8b6f0b54c2aef5408ae90a560b7bf0fbf1b95b3c652b0171"
 dependencies = [
  "futures 0.1.29",
  "futures-channel",
@@ -803,7 +803,7 @@ checksum = "9625f605ddfaf894bf78a544a7b8e31f562dc843654723a49892d9c7e75ac708"
 dependencies = [
  "async-std",
  "bytes",
- "futures 0.3.1",
+ "futures 0.3.2",
  "http",
  "pin-project-lite",
 ]
@@ -814,7 +814,7 @@ version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e33d5dae94e0fdb82f9524ea2f2b98458b3d8448526d8cc8beccb3d3fded8aff"
 dependencies = [
- "futures 0.3.1",
+ "futures 0.3.2",
  "http",
  "http-service",
  "hyper",
@@ -1997,7 +1997,7 @@ source = "git+https://github.com/http-rs/tide#dd9d42d4c8e01299a1c7f69e0f56b8f06c
 dependencies = [
  "async-std",
  "cookie",
- "futures 0.3.1",
+ "futures 0.3.2",
  "http",
  "http-service",
  "http-service-hyper",

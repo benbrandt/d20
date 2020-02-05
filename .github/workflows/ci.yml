@@ -27,6 +27,8 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-build-${{ hashFiles('**/Cargo.lock') }}
 
+      - run: sudo apt-get install libpq-dev openssl postgresql
+
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -137,6 +139,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           default: true
+          toolchain: nightly
 
       - name: Setup db
         run: |

@@ -348,7 +348,7 @@ dependencies = [
  "dotenv",
  "env_logger 0.7.1",
  "failure",
- "futures 0.3.2",
+ "futures 0.3.3",
  "http-service",
  "jsonwebtoken",
  "log",
@@ -565,9 +565,9 @@ checksum = "1b980f2816d6ee8673b6517b52cb0e808a180efc92e5c19d02cdda79066703ef"
 
 [[package]]
 name = "futures"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dda826c2f9351e68bc87b9037d91d818f24384993ecbb37f711e1f71a83182b5"
+checksum = "ad6636318d07abeb4656157ef1936c64485f066c7f9ce5d7c5b879fcb6dd5ccb"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -606,9 +606,9 @@ dependencies = [
 
 [[package]]
 name = "futures-executor"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f085a4c6508baef1f70ec2e0232a09edc649a3b86551fe92555e3a9e43939e4c"
+checksum = "46a5e593d77bee52393c7f3b16b8b413214096d3f7dc4f5f4c57dee01ad2bdaf"
 dependencies = [
  "futures-core",
  "futures-task",
@@ -653,9 +653,9 @@ checksum = "a1de7508b218029b0f01662ed8f61b1c964b3ae99d6f25462d0f55a595109df6"
 
 [[package]]
 name = "futures-util"
-version = "0.3.2"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c3f8c59707f898b8b6f0b54c2aef5408ae90a560b7bf0fbf1b95b3c652b0171"
+checksum = "7d2f1296f7644d2cd908ebb2fa74645608e39f117c72bac251d40418c6d74c4f"
 dependencies = [
  "futures 0.1.29",
  "futures-channel",
@@ -760,7 +760,7 @@ checksum = "9625f605ddfaf894bf78a544a7b8e31f562dc843654723a49892d9c7e75ac708"
 dependencies = [
  "async-std",
  "bytes",
- "futures 0.3.2",
+ "futures 0.3.3",
  "http",
  "pin-project-lite",
 ]
@@ -771,7 +771,7 @@ version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e33d5dae94e0fdb82f9524ea2f2b98458b3d8448526d8cc8beccb3d3fded8aff"
 dependencies = [
- "futures 0.3.2",
+ "futures 0.3.3",
  "http",
  "http-service",
  "hyper",
@@ -1954,7 +1954,7 @@ source = "git+https://github.com/http-rs/tide#dd9d42d4c8e01299a1c7f69e0f56b8f06c
 dependencies = [
  "async-std",
  "cookie",
- "futures 0.3.2",
+ "futures 0.3.3",
  "http",
  "http-service",
  "http-service-hyper",

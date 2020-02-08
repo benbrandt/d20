@@ -135,11 +135,11 @@ jobs:
           command: install
           args: diesel_cli --no-default-features --features=postgres
 
-      - name: Install nightly toolchain
+      - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           default: true
-          toolchain: nightly
+          toolchain: stable
 
       - name: Setup db
         run: |
@@ -149,22 +149,10 @@ jobs:
           DATABASE_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgres://postgres@localhost:${{ job.services.postgres.ports[5432] }}/test
 
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: --all --all-features --all-targets --no-fail-fast
-        env:
-          CARGO_INCREMENTAL: "0"
-          RUSTFLAGS: "-Zprofile -Ccodegen-units=1 -Cinline-threshold=0 -Clink-dead-code -Coverflow-checks=off -Zno-landing-pads"
-          DATABASE_URL: postgres://postgres@localhost:${{ job.services.postgres.ports[5432] }}/test
-          REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}
+      - name: Run cargo-tarpaulin
+        uses: actions-rs/tarpaulin@v0.1
 
-      - id: coverage
-        uses: actions-rs/grcov@v0.1.5
-
-      - name: Coveralls upload
-        uses: coverallsapp/github-action@master
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ${{ steps.coverage.outputs.report }}
+          token: ${{secrets.CODECOV_TOKEN}}

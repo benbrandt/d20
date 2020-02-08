@@ -161,7 +161,7 @@ jobs:
           REDIS_URL: redis://localhost:${{ job.services.redis.ports[6379] }}
 
       - id: coverage
-        uses: actions-rs/grcov@v0.1
+        uses: actions-rs/grcov@v0.1.5
 
       - name: Coveralls upload
         uses: coverallsapp/github-action@master

@@ -129,17 +129,17 @@ jobs:
 
       - run: sudo apt-get install libpq-dev openssl postgresql
 
-      - name: Install diesel cli
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: diesel_cli --no-default-features --features=postgres
-
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1
         with:
           default: true
           toolchain: stable
+
+      - name: Install diesel cli
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: diesel_cli --no-default-features --features=postgres
 
       - name: Setup db
         run: |

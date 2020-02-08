@@ -127,7 +127,7 @@ jobs:
           path: target
           key: ${{ runner.os }}-cargo-build-target-test-${{ hashFiles('**/Cargo.lock') }}
 
-      - run: sudo apt-get install libpq-dev openssl postgresql
+      - run: sudo apt-get install libpq-dev openssl
 
       - name: Install rust toolchain
         uses: actions-rs/toolchain@v1

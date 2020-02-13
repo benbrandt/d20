@@ -101,7 +101,6 @@ fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
     rng.gen_range(1, die + 1)
 }
 
-
 /// # Errors
 ///
 /// Will return `RollError` if instruction is invalid

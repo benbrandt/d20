@@ -71,6 +71,9 @@ pub struct RollResult {
     pub total: i32,
 }
 
+/// # Errors
+///
+/// Will return `RollError` if format is invalid
 pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
     let re = Regex::new(r"(?P<num>\d+)d(?P<dice>\d+)(\s*\+\s*(?P<modifier>\d+))?").unwrap();
     if re.is_match(cmd) {
@@ -98,6 +101,10 @@ fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
     rng.gen_range(1, die + 1)
 }
 
+
+/// # Errors
+///
+/// Will return `RollError` if instruction is invalid
 pub fn roll(rng: &mut impl Rng, instruction: RollInstruction) -> Result<RollResult, RollError> {
     // let mut rng = Pcg64::from_entropy();
     let mut total = 0;

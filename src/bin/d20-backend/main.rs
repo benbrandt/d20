@@ -1,8 +1,8 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
+use async_std::task;
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
-use futures::executor::block_on;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
 use tide::{
@@ -31,7 +31,7 @@ impl Default for State {
     }
 }
 
-fn main() -> Result<(), std::io::Error> {
+fn main() -> async_std::io::Result<()> {
     dotenv().ok();
 
     let _guard = sentry_init();
@@ -41,7 +41,7 @@ fn main() -> Result<(), std::io::Error> {
         .unwrap_or_else(|_| "3000".to_string())
         .parse()
         .expect("PORT must be a number");
-    block_on(async {
+    task::block_on(async {
         // Start a server, configuring the resources to serve.
         let mut app = Server::with_state(State::default());
 

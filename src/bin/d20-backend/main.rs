@@ -10,7 +10,6 @@ use tide::{
     Server,
 };
 
-mod dice_roller;
 mod handlers;
 
 // First, we define `State` that holds accumulator state. This is accessible as state in

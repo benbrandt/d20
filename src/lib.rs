@@ -10,6 +10,7 @@ use r2d2_rng::RngConnectionManager;
 use sentry::{self, integrations, internals::ClientInitGuard};
 use std::env;
 
+pub mod dice_roller;
 pub mod models;
 pub mod r2d2_rng;
 pub mod schema;

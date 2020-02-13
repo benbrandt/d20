@@ -1,6 +1,8 @@
-use crate::dice_roller::{self, RollInstruction};
 use crate::State;
-use d20::REDIS_KEY_ROLL_STATS;
+use d20::{
+    dice_roller::{self, RollInstruction},
+    REDIS_KEY_ROLL_STATS,
+};
 use r2d2_redis::redis::{pipe, PipelineCommands};
 use serde::Deserialize;
 use std::collections::HashMap;

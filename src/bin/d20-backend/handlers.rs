@@ -3,7 +3,7 @@ use d20::{
     dice_roller::{self, RollInstruction},
     REDIS_KEY_ROLL_STATS,
 };
-use r2d2_redis::redis::{pipe, PipelineCommands};
+use r2d2_redis::redis::pipe;
 use serde::Deserialize;
 use std::collections::HashMap;
 use tide::{http::StatusCode, Request, Response, ResultExt};

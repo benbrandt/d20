@@ -90,16 +90,15 @@ jobs:
 
     services:
       postgres:
-        image: postgres:alpine
+        image: postgres
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ""
           POSTGRES_DB: postgres
         ports:
           - 5432/tcp
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
-        image: redis:latest
+        image: redis
         ports:
           - 6379/tcp
         options: --entrypoint redis-server

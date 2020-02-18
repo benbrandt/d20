@@ -93,10 +93,11 @@ jobs:
         image: postgres
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ""
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
           - 5432/tcp
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
         image: redis
         ports:
@@ -145,6 +146,7 @@ jobs:
         env:
           DATABASE_PORT: ${{ job.services.postgres.ports[5432] }}
           DATABASE_URL: postgres://postgres@localhost:${{ job.services.postgres.ports[5432] }}/test
+          PGPASSWORD: postgres
 
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1

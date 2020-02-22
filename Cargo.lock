@@ -279,14 +279,15 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-epoch"
-version = "0.8.0"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5064ebdbf05ce3cb95e45c8b086f72263f4166b29b97f6baff7ef7fe047b55ac"
+checksum = "cc13e9e3a94a48c9561c34551235fc59b2c11d2a95ae2aa22b5ecdcf2b2ba3e2"
 dependencies = [
- "autocfg 0.1.7",
+ "autocfg 1.0.0",
  "cfg-if",
  "crossbeam-utils",
  "lazy_static",
+ "maybe-uninit",
  "memoffset",
  "scopeguard",
 ]

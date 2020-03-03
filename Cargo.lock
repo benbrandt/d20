@@ -870,9 +870,9 @@ dependencies = [
 
 [[package]]
 name = "im"
-version = "14.2.0"
+version = "14.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e302bf26ba21de289e808230f80fe799fd371268d853783ee7f844c7cb5704b7"
+checksum = "696059c87b83c5a258817ecd67c3af915e3ed141891fc35a1e79908801cf0ce7"
 dependencies = [
  "bitmaps",
  "rand_core",

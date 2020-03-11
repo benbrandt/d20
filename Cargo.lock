@@ -1741,9 +1741,9 @@ dependencies = [
 
 [[package]]
 name = "sized-chunks"
-version = "0.5.2"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cfebcc1ad7f8439bff83ff95656c83bd9e4e832630bc9bb7c59774d0bc526b92"
+checksum = "d59044ea371ad781ff976f7b06480b9f0180e834eda94114f2afb4afc12b7718"
 dependencies = [
  "bitmaps",
  "typenum",

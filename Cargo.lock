@@ -1315,14 +1315,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro-hack"
-version = "0.5.12"
+version = "0.5.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f918f2b601f93baa836c1c2945faef682ba5b6d4828ecb45eeb7cc3c71b811b4"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
+checksum = "ed27b3093c0440c350cb2f4c985621e738ae3c50df770a7a9b08b449e6ac83bb"
 
 [[package]]
 name = "proc-macro-nested"

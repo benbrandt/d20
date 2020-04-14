@@ -311,7 +311,7 @@ dependencies = [
  "env_logger",
  "failure",
  "futures 0.3.4",
- "http-service",
+ "http-service 0.5.0",
  "jsonwebtoken",
  "log",
  "mime",
@@ -738,6 +738,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "http-service"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2c574f90a9567a12b72e9071ab541704ce8d2bea45a950c33991556a1880cd32"
+dependencies = [
+ "async-std",
+ "http-types",
+]
+
+[[package]]
 name = "http-service-hyper"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -745,8 +755,23 @@ checksum = "e33d5dae94e0fdb82f9524ea2f2b98458b3d8448526d8cc8beccb3d3fded8aff"
 dependencies = [
  "futures 0.3.4",
  "http 0.1.21",
- "http-service",
+ "http-service 0.4.0",
  "hyper 0.12.35",
+]
+
+[[package]]
+name = "http-types"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c85c8f8128a08fd00f9e1ef32ff9e4201f8e3134a52844fe221241a6eaaee671"
+dependencies = [
+ "anyhow",
+ "async-std",
+ "cookie",
+ "infer",
+ "omnom",
+ "pin-project-lite",
+ "url 2.1.1",
 ]
 
 [[package]]
@@ -880,6 +905,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "076f042c5b7b98f31d205f1249267e12a6518c1481e9dae9764af19b707d2292"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "infer"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d55c406a76164eb346a829ed4b97b73cb06259078eca01adeb12e8ca308d4123"
+dependencies = [
+ "byteorder",
 ]
 
 [[package]]
@@ -1146,6 +1180,15 @@ checksum = "46203554f085ff89c235cd12f7075f3233af9b11ed7c9e16dfe2560d03313ce6"
 dependencies = [
  "hermit-abi",
  "libc",
+]
+
+[[package]]
+name = "omnom"
+version = "2.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d6b216cee2e0d6e680f73158d15468c80b39e571c11669cd90556f9a644e9fd3"
+dependencies = [
+ "memchr",
 ]
 
 [[package]]
@@ -1851,7 +1894,7 @@ dependencies = [
  "cookie",
  "futures 0.3.4",
  "http 0.1.21",
- "http-service",
+ "http-service 0.4.0",
  "http-service-hyper",
  "log",
  "mime",

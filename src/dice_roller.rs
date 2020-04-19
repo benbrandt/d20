@@ -3,7 +3,10 @@ use rand::Rng;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fmt;
-use tide::{http::status::StatusCode, IntoResponse, Response};
+use tide::{
+    http_types::{headers, StatusCode},
+    IntoResponse, Response,
+};
 
 // All the possible D&D dice
 const DICE_VALUES: [i32; 7] = [4, 6, 8, 10, 12, 20, 100];
@@ -54,9 +57,9 @@ impl fmt::Display for RollError {
 
 impl IntoResponse for RollError {
     fn into_response(self) -> Response {
-        Response::new(StatusCode::BAD_REQUEST.into())
+        Response::new(StatusCode::BadRequest)
             .body(Body::from(serde_json::to_vec(&self).unwrap()))
-            .set_header("Content-Type", "application/json")
+            .set_header(headers::CONTENT_TYPE, "application/json")
     }
 }
 

@@ -4,7 +4,7 @@ use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use tide::{
-    http_types::{headers, StatusCode},
+    http::{headers, StatusCode},
     IntoResponse, Response,
 };
 

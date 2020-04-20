@@ -6,7 +6,7 @@ use d20::{
 use r2d2_redis::redis::pipe;
 use serde::Deserialize;
 use std::collections::HashMap;
-use tide::{http_types::StatusCode, Request, Response, ResultExt};
+use tide::{http::StatusCode, Request, Response};
 
 #[derive(Deserialize)]
 pub struct RollQuery {
@@ -28,22 +28,22 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) {
     pipeline.execute(&mut *conn);
 }
 
-fn roll_to_response(state: &State, instruction: RollInstruction) -> Response {
+fn roll_to_response(state: &State, instruction: RollInstruction) -> tide::Result<Response> {
     let die = instruction.die;
     let pool = state.rng.clone();
-    let mut rng = pool.get().server_err().unwrap();
+    let mut rng = pool.get().unwrap();
     let result = dice_roller::roll(&mut *rng, instruction).unwrap();
     roll_stats(state, die, &result.rolls);
-    Response::new(StatusCode::Ok).body_json(&result).unwrap()
+    Ok(Response::new(StatusCode::Ok).body_json(&result)?)
 }
 
-pub async fn parse_roll(cx: Request<State>) -> Response {
-    let query: RollQuery = cx.query().unwrap();
+pub async fn parse_roll(cx: Request<State>) -> tide::Result<Response> {
+    let query: RollQuery = cx.query()?;
     let instruction = dice_roller::parse_roll(&query.roll).unwrap();
     roll_to_response(cx.state(), instruction)
 }
 
-pub async fn roll(mut cx: Request<State>) -> Response {
-    let body = cx.body_json().await.unwrap();
+pub async fn roll(mut cx: Request<State>) -> tide::Result<Response> {
+    let body = cx.body_json().await?;
     roll_to_response(cx.state(), body)
 }

@@ -1773,7 +1773,7 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.7.0"
-source = "git+https://github.com/http-rs/tide#dd596a8d64e308c7169dcd5c767caee6a9a3d611"
+source = "git+https://github.com/http-rs/tide#273c1e819c8aef6dff946fd6881ae0855044ccaa"
 dependencies = [
  "async-std",
  "cookie",
@@ -1781,7 +1781,7 @@ dependencies = [
  "http-service",
  "http-service-h1",
  "http-types",
- "log",
+ "kv-log-macro",
  "mime",
  "route-recognizer",
  "serde",

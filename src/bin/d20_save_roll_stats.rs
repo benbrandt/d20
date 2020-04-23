@@ -2,9 +2,9 @@
 use d20::{db_pool, models::RollStat, redis_pool, schema, sentry_init, REDIS_KEY_ROLL_STATS};
 use diesel::{self, prelude::*};
 use dotenv::dotenv;
-use log::{debug, error};
 use r2d2_redis::redis::Commands;
 use std::error::Error;
+use tide::log::{debug, error};
 
 fn main() -> Result<(), Box<dyn Error>> {
     use schema::roll_stats::dsl::{roll_count, roll_stats};

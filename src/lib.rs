@@ -9,6 +9,7 @@ use r2d2_redis::RedisConnectionManager;
 use r2d2_rng::RngConnectionManager;
 use sentry::{self, integrations, internals::ClientInitGuard};
 use std::env;
+use tide::log;
 
 pub mod dice_roller;
 pub mod models;
@@ -20,7 +21,7 @@ pub const REDIS_KEY_ROLL_STATS: &str = "roll_stats";
 pub fn sentry_init() -> ClientInitGuard {
     let guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
     env::set_var("RUST_BACKTRACE", "1");
-    integrations::env_logger::init(None, integrations::log::LoggerOptions::default());
+    femme::start(log::Level::Info.to_level_filter()).unwrap();
     integrations::panic::register_panic_handler();
     guard
 }

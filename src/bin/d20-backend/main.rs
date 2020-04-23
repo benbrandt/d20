@@ -5,10 +5,7 @@ use diesel::r2d2::Pool;
 use dotenv::dotenv;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
-use tide::{
-    middleware::{Cors, RequestLogger},
-    Server,
-};
+use tide::{middleware::Cors, Server};
 
 mod handlers;
 
@@ -44,7 +41,7 @@ fn main() -> async_std::io::Result<()> {
         // Start a server, configuring the resources to serve.
         let mut app = Server::with_state(State::default());
 
-        app.middleware(RequestLogger::new()).middleware(Cors::new());
+        app.middleware(Cors::new());
         //     .middleware(Compression::new())
         //     .middleware(Decompression::new());
 

@@ -71,6 +71,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-sse"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6de73294dd1287b32b10f4c884186446353048f183071dff38c1481f82c053b3"
+dependencies = [
+ "async-std",
+ "http-types",
+ "log",
+ "memchr",
+ "pin-project-lite",
+]
+
+[[package]]
 name = "async-std"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1848,8 +1861,9 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.7.0"
-source = "git+https://github.com/http-rs/tide#273c1e819c8aef6dff946fd6881ae0855044ccaa"
+source = "git+https://github.com/http-rs/tide#353f9c8e9355e6c53d02a2d99d671bbb54aa6496"
 dependencies = [
+ "async-sse",
  "async-std",
  "cookie",
  "futures-core",

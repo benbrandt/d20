@@ -1,11 +1,11 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
-use async_std::task;
+use async_std::io;
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;
 use dotenv::dotenv;
 use r2d2_redis::RedisConnectionManager;
 use std::env;
-use tide::{middleware::Cors, Server};
+use tide::{security::CorsMiddleware, Server};
 
 mod handlers;
 
@@ -27,7 +27,8 @@ impl Default for State {
     }
 }
 
-fn main() -> async_std::io::Result<()> {
+#[async_std::main]
+async fn main() -> io::Result<()> {
     dotenv().ok();
 
     let _guard = sentry_init();
@@ -37,19 +38,18 @@ fn main() -> async_std::io::Result<()> {
         .unwrap_or_else(|_| "3000".to_string())
         .parse()
         .expect("PORT must be a number");
-    task::block_on(async {
-        // Start a server, configuring the resources to serve.
-        let mut app = Server::with_state(State::default());
 
-        app.middleware(Cors::new());
-        //     .middleware(Compression::new())
-        //     .middleware(Decompression::new());
+    // Start a server, configuring the resources to serve.
+    let mut app = Server::with_state(State::default());
 
-        app.at("/roll/")
-            .get(handlers::parse_roll)
-            .post(handlers::roll);
+    app.middleware(CorsMiddleware::new());
+    //     .middleware(Compression::new())
+    //     .middleware(Decompression::new());
 
-        app.listen(format!("0.0.0.0:{}", port)).await?;
-        Ok(())
-    })
+    app.at("/roll/")
+        .get(handlers::parse_roll)
+        .post(handlers::roll);
+
+    app.listen(format!("0.0.0.0:{}", port)).await?;
+    Ok(())
 }

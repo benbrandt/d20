@@ -28,22 +28,22 @@ pub fn roll_stats(state: &State, die: i32, rolls: &[i32]) {
     pipeline.execute(&mut *conn);
 }
 
-fn roll_to_response(state: &State, instruction: RollInstruction) -> tide::Result<Response> {
+fn roll_to_response(state: &State, instruction: RollInstruction) -> tide::Result {
     let die = instruction.die;
     let pool = state.rng.clone();
-    let mut rng = pool.get().unwrap();
-    let result = dice_roller::roll(&mut *rng, instruction).unwrap();
+    let mut rng = pool.get()?;
+    let result = dice_roller::roll(&mut *rng, instruction)?;
     roll_stats(state, die, &result.rolls);
     Ok(Response::new(StatusCode::Ok).body_json(&result)?)
 }
 
-pub async fn parse_roll(cx: Request<State>) -> tide::Result<Response> {
+pub async fn parse_roll(cx: Request<State>) -> tide::Result {
     let query: RollQuery = cx.query()?;
-    let instruction = dice_roller::parse_roll(&query.roll).unwrap();
+    let instruction = dice_roller::parse_roll(&query.roll)?;
     roll_to_response(cx.state(), instruction)
 }
 
-pub async fn roll(mut cx: Request<State>) -> tide::Result<Response> {
+pub async fn roll(mut cx: Request<State>) -> tide::Result {
     let body = cx.body_json().await?;
     roll_to_response(cx.state(), body)
 }

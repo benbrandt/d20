@@ -1860,8 +1860,8 @@ dependencies = [
 
 [[package]]
 name = "tide"
-version = "0.8.0"
-source = "git+https://github.com/http-rs/tide#28e59042b4a0c8fc8c24e9d0500ff2d07ffbfcd5"
+version = "0.8.1"
+source = "git+https://github.com/http-rs/tide#7410d35cd22c9611a7c5fd6a8168f5e5aff7d3bd"
 dependencies = [
  "async-sse",
  "async-std",
@@ -1872,6 +1872,7 @@ dependencies = [
  "http-types",
  "kv-log-macro",
  "mime",
+ "mime_guess",
  "route-recognizer",
  "serde",
  "serde_json",

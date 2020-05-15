@@ -1877,7 +1877,7 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.8.1"
-source = "git+https://github.com/http-rs/tide#15272f93725a3044a16b36f0825b518c64a2f68a"
+source = "git+https://github.com/http-rs/tide#46aa4e06093131083a6ee99109f6c051bf467c52"
 dependencies = [
  "async-sse",
  "async-std",

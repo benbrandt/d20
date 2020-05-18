@@ -786,18 +786,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "http-service-h1"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b10c11288f86378ecdab7d468e5313304f8dfcffee3107f151f946e3b00271df"
-dependencies = [
- "async-h1",
- "async-std",
- "http-service",
- "http-types",
-]
-
-[[package]]
 name = "http-types"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1877,14 +1865,13 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.8.1"
-source = "git+https://github.com/http-rs/tide#46aa4e06093131083a6ee99109f6c051bf467c52"
+source = "git+https://github.com/http-rs/tide#8850cbbae74edffa85e77db08a8ba30133f147c0"
 dependencies = [
+ "async-h1",
  "async-sse",
  "async-std",
  "cookie",
- "futures-core",
- "http-service",
- "http-service-h1",
+ "femme",
  "http-types",
  "kv-log-macro",
  "mime",
@@ -1893,7 +1880,6 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_qs",
- "url 2.1.1",
 ]
 
 [[package]]

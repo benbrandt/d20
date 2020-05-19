@@ -20,7 +20,7 @@ pub const REDIS_KEY_ROLL_STATS: &str = "roll_stats";
 pub fn sentry_init() -> ClientInitGuard {
     let guard = sentry::init("https://046b94f8170f4135a47ca9d0f9709a6d@sentry.io/1438468");
     env::set_var("RUST_BACKTRACE", "1");
-    femme::start();
+    tide::log::start();
     integrations::panic::register_panic_handler();
     guard
 }

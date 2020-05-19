@@ -401,7 +401,7 @@ dependencies = [
  "diesel",
  "dotenv",
  "failure",
- "femme 1.3.0",
+ "femme",
  "futures",
  "http-service",
  "jsonwebtoken",
@@ -531,24 +531,6 @@ dependencies = [
  "quote 1.0.3",
  "syn 1.0.18",
  "synstructure",
-]
-
-[[package]]
-name = "femme"
-version = "1.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d9ac2da60a2a97a0643d082f1cb25901a90e6f2f69f03baf9763721aa31ee6a"
-dependencies = [
- "async-log",
- "cfg-if",
- "console",
- "js-sys",
- "log",
- "serde",
- "serde_derive",
- "serde_json",
- "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -1889,7 +1871,7 @@ dependencies = [
  "async-sse",
  "async-std",
  "cookie",
- "femme 2.0.1",
+ "femme",
  "http-types",
  "kv-log-macro",
  "mime",

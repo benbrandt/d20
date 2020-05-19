@@ -13,7 +13,7 @@ chrono = "0.4"
 diesel = { version = "1", features = ["postgres", "extras"] }
 dotenv = "0.15"
 failure = "0.1"
-femme = "1"
+femme = "2"
 futures = "0.3"
 http-service = "0.5"
 jsonwebtoken = "7"

@@ -401,7 +401,7 @@ dependencies = [
  "diesel",
  "dotenv",
  "failure",
- "femme",
+ "femme 1.3.0",
  "futures",
  "http-service",
  "jsonwebtoken",
@@ -538,6 +538,24 @@ name = "femme"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4d9ac2da60a2a97a0643d082f1cb25901a90e6f2f69f03baf9763721aa31ee6a"
+dependencies = [
+ "async-log",
+ "cfg-if",
+ "console",
+ "js-sys",
+ "log",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "femme"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "21139dbe6fa60a34cdde9e3970a0ee3781216a4b3ef694eb4fcb3a1ed801d9a2"
 dependencies = [
  "async-log",
  "cfg-if",
@@ -1865,13 +1883,13 @@ dependencies = [
 [[package]]
 name = "tide"
 version = "0.8.1"
-source = "git+https://github.com/http-rs/tide#8850cbbae74edffa85e77db08a8ba30133f147c0"
+source = "git+https://github.com/http-rs/tide#f169f9c01286f14a22d16d060f513683c2ff12cc"
 dependencies = [
  "async-h1",
  "async-sse",
  "async-std",
  "cookie",
- "femme",
+ "femme 2.0.1",
  "http-types",
  "kv-log-macro",
  "mime",

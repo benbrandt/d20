@@ -6,7 +6,7 @@ use d20::{
 use r2d2_redis::redis::pipe;
 use serde::Deserialize;
 use std::collections::HashMap;
-use tide::{http::StatusCode, Request, Response};
+use tide::{prelude::json, Request};
 
 #[derive(Deserialize)]
 pub struct RollQuery {
@@ -34,7 +34,7 @@ fn roll_to_response(state: &State, instruction: RollInstruction) -> tide::Result
     let mut rng = pool.get()?;
     let result = dice_roller::roll(&mut *rng, instruction)?;
     roll_stats(state, die, &result.rolls);
-    Ok(Response::new(StatusCode::Ok).body_json(&result)?)
+    Ok(json!(&result).into())
 }
 
 pub async fn parse_roll(cx: Request<State>) -> tide::Result {

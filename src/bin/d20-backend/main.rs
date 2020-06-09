@@ -1,4 +1,5 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
+#![allow(clippy::used_underscore_binding)]
 use async_std::io;
 use d20::{r2d2_rng::RngConnectionManager, redis_pool, rng_pool, sentry_init};
 use diesel::r2d2::Pool;

@@ -1,4 +1,5 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
+#![allow(clippy::used_underscore_binding)]
 use d20::{db_pool, models::RollStat, schema::roll_stats, sentry_init};
 use diesel::prelude::*;
 use dotenv::dotenv;

@@ -1,4 +1,5 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
+#![allow(clippy::used_underscore_binding)]
 use async_std::io;
 use d20::{
     dice_roller::{self, RollInstruction},

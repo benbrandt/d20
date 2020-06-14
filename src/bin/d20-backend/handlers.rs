@@ -37,13 +37,13 @@ fn roll_to_response(state: &State, instruction: RollInstruction) -> tide::Result
     Ok(json!(&result).into())
 }
 
-pub async fn parse_roll(cx: Request<State>) -> tide::Result {
-    let query: RollQuery = cx.query()?;
+pub async fn parse_roll(req: Request<State>) -> tide::Result {
+    let query: RollQuery = req.query()?;
     let instruction = dice_roller::parse_roll(&query.roll)?;
-    roll_to_response(cx.state(), instruction)
+    roll_to_response(req.state(), instruction)
 }
 
-pub async fn roll(mut cx: Request<State>) -> tide::Result {
-    let body = cx.body_json().await?;
-    roll_to_response(cx.state(), body)
+pub async fn roll(mut req: Request<State>) -> tide::Result {
+    let body = req.body_json().await?;
+    roll_to_response(req.state(), body)
 }

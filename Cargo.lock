@@ -1842,9 +1842,9 @@ checksum = "c7cb5678e1615754284ec264d9bb5b4c27d2018577fd90ac0ceb578591ed5ee4"
 
 [[package]]
 name = "smol"
-version = "0.1.14"
+version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2f50d21240d7045d848746d6244762b8cb96449b586b4200519719784859ef50"
+checksum = "4c3546640e104d1ee544df9c08ac4896d44ef1de89a6d7cc4a3c22f677d5ef38"
 dependencies = [
  "async-task",
  "blocking",

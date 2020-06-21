@@ -2370,9 +2370,9 @@ dependencies = [
 
 [[package]]
 name = "wepoll-sys-stjepang"
-version = "1.0.0"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "74e0414ddefc9d668689fa1540beede94710b2b978bb531335051a0172a4f496"
+checksum = "b8e4c5dc70383c82ebf55583ddb7d27173e565086f653c35e390145cca095e38"
 dependencies = [
  "cc",
 ]

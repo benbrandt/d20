@@ -1846,9 +1846,9 @@ checksum = "c7cb5678e1615754284ec264d9bb5b4c27d2018577fd90ac0ceb578591ed5ee4"
 
 [[package]]
 name = "smol"
-version = "0.1.17"
+version = "0.1.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4de2eab434e51cc924e14fcbb1ef70373aebc94eea7e39205a4ef4ff2126fb06"
+checksum = "620cbb3c6e34da57d3a248cda0cd01cd5848164dc062e764e65d06fe3ea7aed5"
 dependencies = [
  "async-task",
  "blocking",
@@ -1862,6 +1862,7 @@ dependencies = [
  "slab",
  "socket2",
  "wepoll-sys-stjepang",
+ "winapi 0.3.8",
 ]
 
 [[package]]

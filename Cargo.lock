@@ -102,6 +102,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-channel"
+version = "1.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee81ba99bee79f3c8ae114ae4baa7eaa326f63447cf2ec65e4393618b63f8770"
+dependencies = [
+ "concurrent-queue",
+ "event-listener",
+ "futures-core",
+]
+
+[[package]]
 name = "async-h1"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -119,10 +130,11 @@ dependencies = [
 
 [[package]]
 name = "async-sse"
-version = "3.0.0"
+version = "3.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aff0a3074c2c3cfd76417f6e03d5c99822d3ef37387af891e4a8bf46447ca870"
+checksum = "a26fe2d2fa49d090097772c83e77453b2812d0902520f41bee9b3b17d02ac0ae"
 dependencies = [
+ "async-channel",
  "async-std",
  "http-types",
  "log",
@@ -546,6 +558,12 @@ dependencies = [
  "backtrace",
  "version_check",
 ]
+
+[[package]]
+name = "event-listener"
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "699d84875f1b72b4da017e6b0f77dfa88c0137f089958a88974d15938cbc2976"
 
 [[package]]
 name = "failure"

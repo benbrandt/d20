@@ -688,9 +688,9 @@ checksum = "de27142b013a8e869c14957e6d2edeef89e97c289e69d042ee3a49acd8b51789"
 
 [[package]]
 name = "futures-lite"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ca082cb144048d4818e88689b9218009eff8ef56c09c3ec2bf42ff3284f7a60"
+checksum = "ac729ff8f89accdbaa5c49feb56a15c942f54095a2144e02c6001eb92a023b1d"
 dependencies = [
  "futures-core",
  "futures-io",

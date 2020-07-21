@@ -700,9 +700,9 @@ checksum = "de27142b013a8e869c14957e6d2edeef89e97c289e69d042ee3a49acd8b51789"
 
 [[package]]
 name = "futures-lite"
-version = "0.1.7"
+version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a0e4cb57cdb0f6077cb5d59d5fae4caf784e162a751457293c90295bbcbd2647"
+checksum = "180d8fc9819eb48a0c976672fbeea13a73e10999e812bdc9e14644c25ad51d60"
 dependencies = [
  "fastrand",
  "futures-core",

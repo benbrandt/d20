@@ -361,9 +361,9 @@ dependencies = [
 
 [[package]]
 name = "concurrent-queue"
-version = "1.2.1"
+version = "1.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "39ff9c66992ebea984b9446b2a45b300947216c17544ec9d7f045afe24333cd0"
+checksum = "30ed07550be01594c6026cff2a1d7fe9c8f683caa798e12b68694ac9e88286a3"
 dependencies = [
  "cache-padded",
 ]

@@ -1485,9 +1485,9 @@ checksum = "d36492546b6af1463394d46f0c834346f31548646f6ba10849802c9c9a27ac33"
 
 [[package]]
 name = "polling"
-version = "0.1.4"
+version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d8a3045854c4a59af6d38cf7e57f0fe2cca449dc1b94dbfffbe96e0220928a2"
+checksum = "9e09dffb745feffca5be3dea51c02b7b368c4597ab0219a82acaf9799ab3e0d1"
 dependencies = [
  "cfg-if",
  "libc",

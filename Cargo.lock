@@ -113,15 +113,16 @@ dependencies = [
 
 [[package]]
 name = "async-executor"
-version = "1.1.1"
+version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a831e74aa1937d3bbd3a356f34c23dbc6b6f0abc5160bd5484a9f75d5e76aea8"
+checksum = "09e88fddcf665081df6cd9d36f1d07f4f8988ca8783bdc3717ff126dca984602"
 dependencies = [
- "async-task",
+ "async-task 4.0.0",
  "concurrent-queue",
  "fastrand",
  "futures-lite",
  "once_cell",
+ "vec-arena",
 ]
 
 [[package]]
@@ -204,7 +205,7 @@ dependencies = [
  "async-global-executor",
  "async-io",
  "async-mutex",
- "async-task",
+ "async-task 3.0.0",
  "blocking",
  "crossbeam-utils",
  "futures-channel",
@@ -228,6 +229,12 @@ name = "async-task"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c17772156ef2829aadc587461c7753af20b7e8db1529bc66855add962a3b35d3"
+
+[[package]]
+name = "async-task"
+version = "4.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c37ba09c1b5185eb9897a5cef32770031f58fa92d9a5f79eb50cae5030b39c1"
 
 [[package]]
 name = "async-trait"

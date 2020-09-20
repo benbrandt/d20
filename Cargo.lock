@@ -127,9 +127,9 @@ dependencies = [
 
 [[package]]
 name = "async-global-executor"
-version = "1.0.2"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c07d34f7bea9658346df5745d5c7b121c475aab7f7ec7c3dc5905d33ddefc899"
+checksum = "5735bb89043cba09ab3a2c30cd7cba18fc06a179257e9353a91afcae00bba484"
 dependencies = [
  "async-executor",
  "async-io",

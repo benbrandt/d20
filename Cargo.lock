@@ -628,9 +628,9 @@ dependencies = [
 
 [[package]]
 name = "event-listener"
-version = "2.5.0"
+version = "2.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cee5d1554b768a54207c7a823f20778fb109b70025127ef0fa4dfacdc3736065"
+checksum = "f7531096570974c3a9dcf9e4b8e1cede1ec26cf5046219fb3b9d897503b9be59"
 
 [[package]]
 name = "failure"

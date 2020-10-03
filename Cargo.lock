@@ -156,9 +156,9 @@ dependencies = [
 
 [[package]]
 name = "async-io"
-version = "1.1.7"
+version = "1.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5f331aaf35b96f0bd5f551a8d798ff81b2b4d371a6b0f9bcfbbc6fe57849cab7"
+checksum = "e8cf20dd2c6d20ef09876e189b44f213e66e846972cb303eef28d9dfbe790928"
 dependencies = [
  "concurrent-queue",
  "fastrand",

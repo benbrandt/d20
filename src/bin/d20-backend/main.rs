@@ -43,9 +43,9 @@ async fn main() -> io::Result<()> {
     // Start a server, configuring the resources to serve.
     let mut app = Server::with_state(State::default());
 
-    app.middleware(CorsMiddleware::new());
-    //     .middleware(Compression::new())
-    //     .middleware(Decompression::new());
+    app.with(CorsMiddleware::new());
+    //     .with(Compression::new())
+    //     .with(Decompression::new());
 
     app.at("/roll/")
         .get(handlers::parse_roll)

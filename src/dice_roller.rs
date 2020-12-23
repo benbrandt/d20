@@ -90,7 +90,7 @@ pub fn parse_roll(cmd: &str) -> Result<RollInstruction, RollError> {
 }
 
 fn gen_roll(rng: &mut impl Rng, die: i32) -> i32 {
-    rng.gen_range(1, die + 1)
+    rng.gen_range(1..=die)
 }
 
 /// # Errors

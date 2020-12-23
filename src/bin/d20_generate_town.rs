@@ -206,7 +206,7 @@ enum Gender {
 }
 impl Distribution<Gender> for Standard {
     fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Gender {
-        match rng.gen_range(0, 2) {
+        match rng.gen_range(0..=1) {
             0 => Gender::Female,
             _ => Gender::Male,
         }

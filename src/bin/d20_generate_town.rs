@@ -1,6 +1,5 @@
 #![warn(clippy::all, clippy::nursery, clippy::pedantic)]
 #![allow(clippy::used_underscore_binding)]
-use async_std::io;
 use d20::{
     dice_roller::{self, RollInstruction},
     rng_pool,
@@ -11,7 +10,7 @@ use rand::{
     Rng,
 };
 use std::convert::TryInto;
-use std::iter::{repeat_with, FromIterator};
+use std::iter::repeat_with;
 
 const FAMILY_NAMES: &[&str] = &[
     "Alastroi",
@@ -191,7 +190,7 @@ impl SwarmsOfRats {
         .unwrap();
         let swarms = repeat_with(|| SwarmOfRats::new(rng)).take(roll.total.try_into().unwrap());
 
-        Self(Vec::from_iter(swarms))
+        Self(swarms.collect())
     }
 }
 #[derive(Debug)]
@@ -317,7 +316,7 @@ impl Zombies {
         .unwrap();
         let zombies = repeat_with(|| Zombie::new(rng)).take(roll.total.try_into().unwrap());
 
-        Self(Vec::from_iter(zombies))
+        Self(zombies.collect())
     }
 }
 
@@ -350,11 +349,9 @@ fn house(rng: &mut impl Rng) {
     println!("{:#?}", occupants);
 }
 
-fn main() -> io::Result<()> {
+fn main() {
     let pool = rng_pool();
     let mut rng = pool.get().unwrap();
 
     house(&mut *rng);
-
-    Ok(())
 }

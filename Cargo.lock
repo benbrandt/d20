@@ -879,9 +879,9 @@ dependencies = [
 
 [[package]]
 name = "futures-macro"
-version = "0.3.8"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77408a692f1f97bcc61dc001d752e00643408fbc922e4d634c655df50d595556"
+checksum = "0f8719ca0e1f3c5e34f3efe4570ef2c0610ca6da85ae7990d472e9cbfba13664"
 dependencies = [
  "proc-macro-hack",
  "proc-macro2",
@@ -906,9 +906,9 @@ dependencies = [
 
 [[package]]
 name = "futures-util"
-version = "0.3.8"
+version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d304cff4a7b99cfb7986f7d43fbe93d175e72e704a8860787cc95e9ffd85cbd2"
+checksum = "036a2107cdeb57f6d7322f1b6c363dad67cd63ca3b7d1b925bdf75bd5d96cda9"
 dependencies = [
  "futures-core",
  "futures-io",
@@ -916,7 +916,7 @@ dependencies = [
  "futures-sink",
  "futures-task",
  "memchr",
- "pin-project 1.0.2",
+ "pin-project-lite 0.2.0",
  "pin-utils",
  "proc-macro-hack",
  "proc-macro-nested",

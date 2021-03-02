@@ -527,16 +527,16 @@ checksum = "245097e9a4535ee1e3e3931fcfcd55a796a44c643e8596ff6566d68f09b87bbc"
 
 [[package]]
 name = "cookie"
-version = "0.14.3"
+version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "784ad0fbab4f3e9cef09f20e0aea6000ae08d2cb98ac4c0abc53df18803d702f"
+checksum = "03a5d7b21829bc7b4bf4754a978a241ae54ea55a40f92bb20216e54096f4b951"
 dependencies = [
  "aes-gcm",
- "base64 0.12.3",
+ "base64 0.13.0",
  "hkdf",
  "hmac 0.10.1",
  "percent-encoding",
- "rand 0.7.3",
+ "rand 0.8.3",
  "sha2",
  "time 0.2.23",
  "version_check",

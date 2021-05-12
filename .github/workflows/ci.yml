@@ -37,7 +37,7 @@ jobs:
           toolchain: stable
 
       - name: cargo build
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: build
 
@@ -74,7 +74,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: cargo fmt
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: fmt
           args: --all -- --check
@@ -134,7 +134,7 @@ jobs:
           toolchain: stable
 
       - name: Install diesel cli
-        uses: actions-rs/cargo@v1
+        uses: actions-rs/cargo@v1.0.3
         with:
           command: install
           args: diesel_cli --no-default-features --features=postgres
